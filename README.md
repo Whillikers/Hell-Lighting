@@ -1,1 +1,1 @@
-"#Hell-Lighting" 
+#Hell-Lighting
