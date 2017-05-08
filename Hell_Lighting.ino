@@ -1,3 +1,4 @@
+
 #include <FastLED.h>
 
 // Debug switches //
@@ -11,6 +12,9 @@
 #define NUM_LEDS_4 251
 #define NUM_LEDS_MAX 355
 #define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
+
+// Hardware Constants //
+#define POT_MAX 1023
 
 // Pins //
 // Interface //
@@ -31,11 +35,12 @@ enum pattern {
   pulse,
   purple,
   red_dot,
-  fire
+  fire,
+  stars
 };
 
 static const char* pattern_string[] = {
-    "color", "purple", "red_dot", "fire",
+    "color", "pulse", "purple", "red_dot", "fire", "stars",
 };
 
 // Settings //
@@ -170,6 +175,9 @@ void runPattern() {
     case fire:
       pattern_fire();
       break;
+  case stars: 
+    pattern_white_stars();
+    break;
     default:
       reset();
   }
@@ -252,6 +260,12 @@ void pattern_purple() {
 }
 
 void pattern_red_dot() {
+  /*
+  This pattern sends a small red pulse traveling around in a circle. Has persistence
+  of vission effects at higher speeds. 
+  
+  POT -> change dot speed. 
+  */
   brightness = BRIGHTNESS_MAX;
 
   if (!g) {
@@ -268,6 +282,68 @@ void pattern_red_dot() {
   Serial.println(g);
   delay(max(potValue / 10, 1));
 }
+
+void pattern_white_stars(){
+  /*
+  This is a night sky pattern that more or less randomly turns led's on and off. 
+  everyonce and a while (ballpark 16 minutes) there will be a "special event"
+  that has the potential to turn on or off a very large number of LEDs. 
+  
+  pot -> used to determine the ratio of led's turned off to led's turned on. 
+  */
+  brightness = BRIGHTNESS_MAX / 2;
+  int scalenumber = 100; // determines how many total operations are conducted per
+               // tick of the program. 
+  int specialFrequency = 20000; // how many ticks (on average) between special events.
+
+  for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
+    if (leds[i].r != 0) { //Fade
+      int fade = 50;
+
+      if (leds[i].r <= fade) {
+        leds[i] = CRGB::Black;
+        continue;
+      }
+      
+      leds[i].r -= fade;
+      leds[i].g -= fade;
+      leds[i].b -= fade;
+      continue;
+    }
+
+    int r = random(512);
+    if (r > potValue) leds[i] = CRGB::White;
+  }
+             
+  /*
+  // delete some number of currently bright LEDs.
+  for (int i = 0; i < random(potValue / scalenumber); i++){
+    leds[random(NUM_LEDS_TOTAL)] = CRGB::Black;
+  }
+  
+  // set some number of leds to be white. 
+  for (int i = 0; i < random((POT_MAX - potValue) / scalenumber); i++){
+    leds[random(NUM_LEDS_TOTAL)] = CRGB::White; 
+  }
+  */
+  
+  // periodically have a large increase or decrease in the number of lights.
+  if (random(specialFrequency) == 0){
+    if (random(1) == 1){
+      for(int i = 0; i < random(NUM_LEDS_TOTAL); i++){
+        leds[random(NUM_LEDS_TOTAL)] = CRGB::Black;
+      }
+    } else {
+      for(int i = 0; i < random(NUM_LEDS_TOTAL); i++){
+        leds[random(NUM_LEDS_TOTAL)] = CRGB::Black;
+      }
+    }
+  }
+  FastLED.show();
+  delay(25);
+}
+  
+
 
 void pattern_fire() {
   brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - potValue)) / 1024.0), 5);
@@ -302,16 +378,21 @@ pattern getNextPattern(pattern p) {
   if (p == pulse) return purple;
   if (p == purple) return red_dot;
   if (p == red_dot) return fire;
-  if (p == fire) return color;
+  if (p == fire) return stars;
+  if (p == stars) return color;
   return PATTERN_DEFAULT; // Default if current pattern is unknown
 }
 
 // Maps patterns to their previous pattern; allows for decrementing patterns intelligently //
 pattern getPreviousPattern(pattern p) {
-  if (p == color) return fire;
+  if (p == color) return stars;
   if (p == pulse) return color;
   if (p == purple) return pulse;
   if (p == red_dot) return purple;
   if (p == fire) return red_dot;
+  if (p == stars) return fire;
   return PATTERN_DEFAULT; // Default if current pattern is unknown
 }
+
+
+
