@@ -11,7 +11,7 @@
 #define NUM_LEDS_4 251
 #define NUM_LEDS_MAX 355
 #define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
-#define NUM_PATTERNS 6
+#define NUM_PATTERNS 5
 
 // Hardware Constants //
 #define POT_MAX 1023
@@ -68,24 +68,19 @@ void setup() {
 
   // Initialize pattern ordering //
   patterns[0] = pattern_color;
-  patterns[1] = pattern_pulse;
-  patterns[2] = pattern_purple;
-  patterns[3] = pattern_red_dot;
-  patterns[4] = pattern_fire;
-  patterns[5] = pattern_white_stars;
+  patterns[1] = pattern_purple;
+  patterns[2] = pattern_red_dot;
+  patterns[3] = pattern_fire;
+  patterns[4] = pattern_white_stars;
   currentPatternIndex = 0;
 
   // Rest of setup is handled in reset() //
   reset();
-  runPattern();
 }
 
-void loop() {
-  //runPattern();
-}
+void loop() {}
 
 void runPattern() {
-  FastLED.setBrightness(brightness);
   patterns[currentPatternIndex]();
 }
 
@@ -103,6 +98,7 @@ void reset() {
 
   FastLED.setBrightness(brightness);
   clearLEDs();
+  runPattern();
 }
 
 // Sets all active LEDs to black //
@@ -128,32 +124,6 @@ void pattern_color() {
       leds[transform(i)] = col;
     }
 
-    FastLED.show();
-    delay(10);
-  }
-}
-
-void pattern_pulse() {
-  while (true) {
-    if (g <= 0) {
-      g = 1;
-      f = 1;
-    } else if (g >= 100) {
-      g = 99;
-      f = 0;
-    }
-    if (f) {
-      g += analogRead(PIN_POT) / 14;
-    } else {
-      g -= analogRead(PIN_POT) / 14;
-    }
-  
-    brightness = ((float) BRIGHTNESS_MAX) * cos(((float) g) * 3.1 / 200.0);
-  
-    for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
-      leds[transform(i)] = CRGB::Cyan;
-    }
-  
     FastLED.show();
     delay(10);
   }
@@ -270,6 +240,7 @@ void pattern_fire() {
   int x;
   while (true) {
     brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
+    FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {
       if (leds[i].r == 0) { // This point has not yet been initialized
         leds[i] = CRGB(random(100, 255), random(0, 50), 0);
