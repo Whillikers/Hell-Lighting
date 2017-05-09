@@ -161,6 +161,8 @@ void pattern_red_dot() {
   brightness = BRIGHTNESS_MAX;
   FastLED.setBrightness(brightness);
   clearLEDs();
+
+  /*
   int g = 0;
 
   while (true) {
@@ -176,8 +178,19 @@ void pattern_red_dot() {
     
     FastLED.show();
     g = (g + 1) % (NUM_LEDS_TOTAL - 1);
-    Serial.println(g);
     delay(max(analogRead(PIN_POT) / 10, 1));
+  }
+  */
+
+  while (true) {
+    for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
+      if (escape) return;
+      leds[transform(i)] = CRGB::Red;
+      leds[transform(i + 1)] = CRGB::Red;
+      leds[transform(i - 1)] = CRGB::Black;
+      FastLED.show();
+      delay(max(analogRead(PIN_POT) / 10, 1));
+    }
   }
 }
 
@@ -273,6 +286,9 @@ void pattern_fire() {
 // Helper functions //
 // Take an LED index and transform it, given that the third and fourth strips are reversed, into an index which will work on the led array //
 int transform(int index) {
+  // Enforce wrapping
+  if (index < 0) index += NUM_LEDS_TOTAL;
+  if (index >= NUM_LEDS_TOTAL) index -= NUM_LEDS_TOTAL;
   if (index < NUM_LEDS_1 + NUM_LEDS_2) return index;
   if (index < NUM_LEDS_1 + NUM_LEDS_2 + NUM_LEDS_3) return 2 * NUM_LEDS_1 + 2 * NUM_LEDS_2 + NUM_LEDS_3 - index - 1;
   return 2 * NUM_LEDS_1 + 2 * NUM_LEDS_2 + 2 * NUM_LEDS_3 + NUM_LEDS_4 - index - 1;
