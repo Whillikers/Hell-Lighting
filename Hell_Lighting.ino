@@ -1,46 +1,5 @@
 #include <FastLED.h>
-
-// Debug switches //
-// #define DEBUG 1
-// #define DEBUG_POT 1
-
-// System parameters //
-#define NUM_LEDS_1 332
-#define NUM_LEDS_2 285
-#define NUM_LEDS_3 355
-#define NUM_LEDS_4 251
-#define NUM_LEDS_MAX 355
-#define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
-#define NUM_PATTERNS 6
-
-// Hardware Constants //
-#define POT_MAX 1023
-
-// Pins //
-// Interface //
-#define PIN_BUTTON_RESET 2
-#define PIN_BUTTON_NEXT 4
-#define PIN_BUTTON_PREV 11
-// Inputs //
-#define PIN_POT A0
-// LED //
-#define PIN_LED_1 9
-#define PIN_LED_2 8
-#define PIN_LED_3 6
-#define PIN_LED_4 7
-
-// Pattern list //
-void (*patterns[NUM_PATTERNS])(void);
-
-// Settings //
-#define BRIGHTNESS_MAX 100
-#define PATTERN_DEFAULT color
-
-// Globals //
-CRGB leds[NUM_LEDS_TOTAL]; // Array of all leds taken as one strip, from the inner right corner and going clockwise
-uint8_t brightness;
-int currentPatternIndex;
-bool escape; // Should we be escaping from a function? Used to do asynchronous pattern switching
+#include "hell_lighting.h"
 
 // Automatic functions //
 void setup() {
@@ -56,7 +15,7 @@ void setup() {
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
   // Set up interrupts //
-  pciSetup(PIN_BUTTON_NEXT);
+  pciSetup(PIN_BUTTON_NEXT); // TODO: Rewire to an interrupt pin
   pciSetup(PIN_BUTTON_PREV);
 
   // LED setup //
@@ -95,11 +54,8 @@ void reset() {
   #endif
   
   // Initialize values //
-  brightness = BRIGHTNESS_MAX;
   currentPatternIndex = 0;
   escape = false;
-
-  FastLED.setBrightness(brightness);
   clearLEDs();
   runPattern();
 }
@@ -121,9 +77,8 @@ void pattern_color() {
   clearLEDs();
   while (true) {
     if (escape) return;
-    FastLED.setBrightness(brightness);
+    FastLED.setBrightness(BRIGHTNESS_MAX);
     CHSV col = CHSV(min(analogRead(PIN_POT) / 4, 255), 255, 255);
-    brightness = BRIGHTNESS_MAX;
 
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[transform(i)] = col;
@@ -139,8 +94,7 @@ void pattern_purple() {
   int g = 0;
   while (true) {
     if (escape) return;
-    brightness = BRIGHTNESS_MAX;
-    FastLED.setBrightness(brightness);
+    FastLED.setBrightness(BRIGHTNESS_MAX);
   
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[transform(i)] = ((i + g) % 3 == 0) ? CRGB::Purple : CRGB::Black;
@@ -159,30 +113,9 @@ void pattern_red_dot() {
   
   POT -> change dot speed. 
   */
-  brightness = BRIGHTNESS_MAX;
-  FastLED.setBrightness(brightness);
+  FastLED.setBrightness(BRIGHTNESS_MAX);
   clearLEDs();
-
-  /*
-  int g = 0;
-
-  while (true) {
-    if (escape) return;
-    if (!g) {
-      leds[0] = CRGB::Red;
-      leds[NUM_LEDS_TOTAL - 1] = CRGB::Black;
-    } else {
-      leds[transform(g + 1)] = CRGB::Red;
-      leds[transform(g)] = CRGB::Red;
-      leds[transform(g - 1)] = CRGB::Black;
-    }
-    
-    FastLED.show();
-    g = (g + 1) % (NUM_LEDS_TOTAL - 1);
-    delay(max(analogRead(PIN_POT) / 10, 1));
-  }
-  */
-
+  
   while (true) {
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       if (escape) return;
@@ -204,12 +137,12 @@ void pattern_white_stars(){
   pot -> used to determine the ratio of led's turned off to led's turned on. 
   */
   clearLEDs();
+  FastLED.setBrightness(BRIGHTNESS_MAX / 2);
 
   while (true) {
     if (escape) return;
-    brightness = BRIGHTNESS_MAX / 2;
-    int scalenumber = 100; // determines how many total operations are conducted per
-                 // tick of the program. 
+    
+    int scalenumber = 100; // determines how many total operations are conducted per tick of the program. 
     int specialFrequency = 20000; // how many ticks (on average) between special events.
     int potValue = analogRead(PIN_POT);
   
@@ -266,7 +199,7 @@ void pattern_fire() {
   int x;
   while (true) {
     if (escape) return;
-    brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
+    uint16_t brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
     FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {
       if (leds[i].r == 0) { // This point has not yet been initialized
