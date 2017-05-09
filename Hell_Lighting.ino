@@ -28,7 +28,6 @@
 #define PIN_LED_2 8
 #define PIN_LED_3 6
 #define PIN_LED_4 7
-int f, g, h;
 
 // Pattern list //
 void (*patterns[NUM_PATTERNS])(void);
@@ -97,9 +96,6 @@ void reset() {
   // Initialize values //
   brightness = BRIGHTNESS_MAX;
   currentPatternIndex = 0;
-  f = 0;
-  g = 0;
-  h = 0;
   escape = false;
 
   FastLED.setBrightness(brightness);
@@ -139,6 +135,7 @@ void pattern_color() {
 
 void pattern_purple() {
   clearLEDs();
+  int g = 0;
   while (true) {
     if (escape) return;
     brightness = BRIGHTNESS_MAX;
@@ -164,6 +161,7 @@ void pattern_red_dot() {
   brightness = BRIGHTNESS_MAX;
   FastLED.setBrightness(brightness);
   clearLEDs();
+  int g = 0;
 
   while (true) {
     if (escape) return;
