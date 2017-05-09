@@ -26,13 +26,13 @@ void setup() {
   FastLED.addLeds<APA104, PIN_LED_4, GRB>(leds, NUM_LEDS_1 + NUM_LEDS_2 + NUM_LEDS_3, NUM_LEDS_4);
 
   // Initialize pattern ordering //
+  currentPatternIndex = 0;
   patterns[0] = pattern_color;
   patterns[1] = pattern_purple;
   patterns[2] = pattern_red_dot;
   patterns[3] = pattern_fire;
   patterns[4] = pattern_white_stars;
   patterns[5] = pattern_rule110;
-  currentPatternIndex = 0;
 
   // Rest of setup is handled in reset() //
   reset();
@@ -45,8 +45,8 @@ void loop() {
 }
 
 void runPattern() {
-  patterns[currentPatternIndex]();
   interrupts();
+  patterns[currentPatternIndex]();
 }
 
 void reset() {
@@ -108,16 +108,15 @@ ISR (PCINT1_vect) {}
 
 // Button-press behaviors //
 void nextButton() {
-  if (!digitalRead(PIN_BUTTON_NEXT)) return; // We don't want to detect a falling edge
+  if (!digitalRead(PIN_BUTTON_NEXT)) return; // We only want to detect a rising edge
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
   escape = true;
 }
 
 void previousButton() {
-  if (!digitalRead(PIN_BUTTON_PREV)) return; // We don't want to detect a falling edge
+  if (!digitalRead(PIN_BUTTON_PREV)) return; // We only want to detect a rising edge
   currentPatternIndex--;
   if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
   escape = true;
 }
-

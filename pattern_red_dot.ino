@@ -15,8 +15,7 @@ void pattern_red_dot() {
       leds[transform(i + 1)] = CRGB::Red;
       leds[transform(i - 1)] = CRGB::Black;
       FastLED.show();
-      delay(max(analogRead(PIN_POT) / 10, 1));
+      delay(map(analogRead(PIN_POT), 0, POT_MAX, 1, 120));
     }
   }
 }
-
