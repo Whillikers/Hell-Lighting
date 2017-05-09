@@ -1,4 +1,3 @@
-
 #include <FastLED.h>
 
 // Debug switches //
@@ -12,6 +11,7 @@
 #define NUM_LEDS_4 251
 #define NUM_LEDS_MAX 355
 #define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
+#define NUM_PATTERNS 6
 
 // Hardware Constants //
 #define POT_MAX 1023
@@ -30,14 +30,7 @@
 #define PIN_LED_4 7
 
 // Pattern list //
-enum pattern {
-  color,
-  pulse,
-  purple,
-  red_dot,
-  fire,
-  stars
-};
+void (*patterns[NUM_PATTERNS])(void);
 
 static const char* pattern_string[] = {
     "color", "pulse", "purple", "red_dot", "fire", "stars",
@@ -50,7 +43,8 @@ static const char* pattern_string[] = {
 // Globals //
 CRGB leds[NUM_LEDS_TOTAL]; // Array of all leds taken as one strip, from the inner right corner and going clockwise
 uint8_t brightness;
-pattern currentPattern;
+//pattern currentPattern;
+int currentPatternIndex;
 int potValue; // Current potentiometer reading
 int f, g, h; // Values which may be used by a pattern to store information between frames
 // Button states //
@@ -85,6 +79,15 @@ void setup() {
   FastLED.addLeds<APA104, PIN_LED_3, GRB>(leds, NUM_LEDS_1 + NUM_LEDS_2, NUM_LEDS_3);
   FastLED.addLeds<APA104, PIN_LED_4, GRB>(leds, NUM_LEDS_1 + NUM_LEDS_2 + NUM_LEDS_3, NUM_LEDS_4);
 
+  // Initialize pattern ordering //
+  patterns[0] = pattern_color;
+  patterns[1] = pattern_pulse;
+  patterns[2] = pattern_purple;
+  patterns[3] = pattern_red_dot;
+  patterns[4] = pattern_fire;
+  patterns[5] = pattern_white_stars;
+  currentPatternIndex = 0;
+
   // Rest of setup is handled in reset() //
   reset();
 }
@@ -118,7 +121,8 @@ void handleInputs() {
   }
 
   if ((!buttonState_next) && digitalRead(PIN_BUTTON_NEXT)) { // User pressed the next pattern button
-    currentPattern = getNextPattern(currentPattern);
+    currentPatternIndex++;
+    if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
     buttonState_next = true;
     clearLEDs();
     f = 0;
@@ -127,15 +131,16 @@ void handleInputs() {
 
     #ifdef DEBUG
     Serial.println("Button pressed: next");
-    Serial.print("Current pattern: ");
-    Serial.println(pattern_string[currentPattern]);
+    //Serial.print("Current pattern: ");
+    //Serial.println(pattern_string[currentPattern]);
     #endif
     
     return;
   }
 
   if ((!buttonState_prev) && digitalRead(PIN_BUTTON_PREV)) { // User pressed the previous pattern button
-    currentPattern = getPreviousPattern(currentPattern);
+    currentPatternIndex--;
+    if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
     buttonState_prev = true;
     clearLEDs();
     f = 0;
@@ -158,29 +163,8 @@ void handleInputs() {
 
 void runPattern() {
   FastLED.setBrightness(brightness);
-  
-  switch (currentPattern) {
-    case color:
-      pattern_color();
-      break;
-    case pulse:
-      pattern_pulse();
-      break;
-    case purple:
-      pattern_purple();
-      break;
-    case red_dot:
-      pattern_red_dot();
-      break;
-    case fire:
-      pattern_fire();
-      break;
-  case stars: 
-    pattern_white_stars();
-    break;
-    default:
-      reset();
-  }
+
+  patterns[currentPatternIndex]();
 }
 
 void reset() {
@@ -190,7 +174,7 @@ void reset() {
   
   // Initialize values //
   brightness = BRIGHTNESS_MAX;
-  currentPattern = PATTERN_DEFAULT;
+  currentPatternIndex = 0;
   f = 0;
   g = 0;
   h = 0;
@@ -341,8 +325,7 @@ void pattern_white_stars(){
   }
   FastLED.show();
   delay(25);
-}
-  
+} 
 
 
 void pattern_fire() {
@@ -371,28 +354,3 @@ int transform(int index) {
   if (index < NUM_LEDS_1 + NUM_LEDS_2 + NUM_LEDS_3) return 2 * NUM_LEDS_1 + 2 * NUM_LEDS_2 + NUM_LEDS_3 - index - 1;
   return 2 * NUM_LEDS_1 + 2 * NUM_LEDS_2 + 2 * NUM_LEDS_3 + NUM_LEDS_4 - index - 1;
 }
-
-// Maps patterns to their next pattern; allows for incrementing patterns intelligently //
-pattern getNextPattern(pattern p) {
-  if (p == color) return pulse;
-  if (p == pulse) return purple;
-  if (p == purple) return red_dot;
-  if (p == red_dot) return fire;
-  if (p == fire) return stars;
-  if (p == stars) return color;
-  return PATTERN_DEFAULT; // Default if current pattern is unknown
-}
-
-// Maps patterns to their previous pattern; allows for decrementing patterns intelligently //
-pattern getPreviousPattern(pattern p) {
-  if (p == color) return stars;
-  if (p == pulse) return color;
-  if (p == purple) return pulse;
-  if (p == red_dot) return purple;
-  if (p == fire) return red_dot;
-  if (p == stars) return fire;
-  return PATTERN_DEFAULT; // Default if current pattern is unknown
-}
-
-
-
