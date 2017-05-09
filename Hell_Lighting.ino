@@ -41,6 +41,7 @@ void (*patterns[NUM_PATTERNS])(void);
 CRGB leds[NUM_LEDS_TOTAL]; // Array of all leds taken as one strip, from the inner right corner and going clockwise
 uint8_t brightness;
 int currentPatternIndex;
+bool escape; // Should we be escaping from a function? Used to do asynchronous pattern switching
 
 // Automatic functions //
 void setup() {
@@ -78,10 +79,14 @@ void setup() {
   reset();
 }
 
-void loop() {}
+void loop() {
+  escape = false;
+  runPattern();
+}
 
 void runPattern() {
   patterns[currentPatternIndex]();
+  interrupts();
 }
 
 void reset() {
@@ -95,6 +100,7 @@ void reset() {
   f = 0;
   g = 0;
   h = 0;
+  escape = false;
 
   FastLED.setBrightness(brightness);
   clearLEDs();
@@ -115,7 +121,9 @@ void clearLEDs() {
 
 // Pattern functions //
 void pattern_color() {
+  clearLEDs();
   while (true) {
+    if (escape) return;
     FastLED.setBrightness(brightness);
     CHSV col = CHSV(min(analogRead(PIN_POT) / 4, 255), 255, 255);
     brightness = BRIGHTNESS_MAX;
@@ -130,8 +138,11 @@ void pattern_color() {
 }
 
 void pattern_purple() {
+  clearLEDs();
   while (true) {
+    if (escape) return;
     brightness = BRIGHTNESS_MAX;
+    FastLED.setBrightness(brightness);
   
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[transform(i)] = ((i + g) % 3 == 0) ? CRGB::Purple : CRGB::Black;
@@ -151,9 +162,11 @@ void pattern_red_dot() {
   POT -> change dot speed. 
   */
   brightness = BRIGHTNESS_MAX;
+  FastLED.setBrightness(brightness);
   clearLEDs();
 
   while (true) {
+    if (escape) return;
     if (!g) {
       leds[0] = CRGB::Red;
       leds[NUM_LEDS_TOTAL - 1] = CRGB::Black;
@@ -181,6 +194,7 @@ void pattern_white_stars(){
   clearLEDs();
 
   while (true) {
+    if (escape) return;
     brightness = BRIGHTNESS_MAX / 2;
     int scalenumber = 100; // determines how many total operations are conducted per
                  // tick of the program. 
@@ -239,6 +253,7 @@ void pattern_white_stars(){
 void pattern_fire() {
   int x;
   while (true) {
+    if (escape) return;
     brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
     FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {
@@ -274,11 +289,13 @@ void pciSetup(byte pin) {
 
 // This interrupt handles the "previous button" behavior on pin D11 //
 ISR (PCINT0_vect) { // Pin-interrupt handler for D8 to D13    
+  noInterrupts();
   previousButton();
 }
 
 // This interrupt handles the "next button" behavior on pin D4 //
 ISR (PCINT2_vect) { // Pin-interrupt handler for D0 to D7
+  noInterrupts();
   nextButton();
 }
 
@@ -290,13 +307,13 @@ void nextButton() {
   if (!digitalRead(PIN_BUTTON_NEXT)) return; // We don't want to detect a falling edge
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
-  runPattern();
+  escape = true;
 }
 
 void previousButton() {
   if (!digitalRead(PIN_BUTTON_PREV)) return; // We don't want to detect a falling edge
   currentPatternIndex--;
   if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
-  runPattern();
+  escape = true;
 }
 
