@@ -4,7 +4,7 @@ void pattern_trains() {
   FastLED.setBrightness(BRIGHTNESS_MAX);
 
   // Random number of trains //
-  const int numTrains = 20;
+  const int numTrains = 12;
   const int trailLength = 10;
   int trainPos[numTrains];
   int trainSpeeds[numTrains];

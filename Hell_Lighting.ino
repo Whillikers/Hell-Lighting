@@ -10,7 +10,7 @@ void setup() {
   #endif
   
   // Interface setup //
-  // Assign pins //
+  // Assign pins //      
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
@@ -35,7 +35,7 @@ void setup() {
   patterns[5] = pattern_rule110;
   patterns[6] = pattern_colorloop;
   patterns[7] = pattern_trains;
-
+  
   // Rest of setup is handled in reset() //
   reset();
 }
