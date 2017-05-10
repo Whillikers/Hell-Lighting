@@ -9,7 +9,7 @@
 #define NUM_LEDS_4 251
 #define NUM_LEDS_MAX 355
 #define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
-#define NUM_PATTERNS 6
+#define NUM_PATTERNS 8
 
 // Hardware Constants //
 #define POT_MAX 1023

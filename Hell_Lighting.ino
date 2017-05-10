@@ -33,6 +33,8 @@ void setup() {
   patterns[3] = pattern_fire;
   patterns[4] = pattern_white_stars;
   patterns[5] = pattern_rule110;
+  patterns[6] = pattern_colorloop;
+  patterns[7] = pattern_trains;
 
   // Rest of setup is handled in reset() //
   reset();
