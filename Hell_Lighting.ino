@@ -1,4 +1,5 @@
 #include <FastLED.h>
+#include <setjmp.h>
 #include "hell_lighting.h"
 
 // Automatic functions //
@@ -41,13 +42,10 @@ void setup() {
   reset();
 }
 
-// This only happens once, when a pattern returns; it handles switching to the next pattern to ensure a small stack //
-void loop() {
-  escape = false;
-  runPattern();
-}
+void loop() {}
 
 void runPattern() {
+  setjmp(jumpPoint);
   interrupts();
   patterns[currentPatternIndex]();
 }
@@ -59,7 +57,6 @@ void reset() {
   
   // Initialize values //
   currentPatternIndex = 0;
-  escape = false;
   clearLEDs();
   runPattern();
 }
@@ -114,12 +111,12 @@ void nextButton() {
   if (!digitalRead(PIN_BUTTON_NEXT)) return; // We only want to detect a rising edge
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
-  escape = true;
+  longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
 
 void previousButton() {
   if (!digitalRead(PIN_BUTTON_PREV)) return; // We only want to detect a rising edge
   currentPatternIndex--;
   if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
-  escape = true;
+  longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }

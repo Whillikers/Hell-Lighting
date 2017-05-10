@@ -10,7 +10,6 @@ void pattern_red_dot() {
   
   while (true) {
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
-      if (escape) return;
       leds[transform(i)] = CRGB::Red;
       leds[transform(i + 1)] = CRGB::Red;
       leds[transform(i - 1)] = CRGB::Black;

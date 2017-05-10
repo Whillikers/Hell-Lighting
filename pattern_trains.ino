@@ -19,8 +19,6 @@ void pattern_trains() {
   }
   
   while (true) {
-    if (escape) return;
-
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[i] = CRGB::Black;
     }

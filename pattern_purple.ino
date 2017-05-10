@@ -4,8 +4,6 @@ void pattern_purple() {
   FastLED.setBrightness(BRIGHTNESS_MAX);
   
   while (true) {
-    if (escape) return;
-    
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[transform(i)] = ((i + g) % 3 == 0) ? CRGB::Purple : CRGB::Black;
     }

@@ -9,7 +9,6 @@ void pattern_rule110() {
   
   FastLED.setBrightness(BRIGHTNESS_MAX * 0.75);
   while (true) {
-    if (escape) return;
     // Update cell data
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       if (leds[transform(i - 1)].r > 0) { // Left cell is lit

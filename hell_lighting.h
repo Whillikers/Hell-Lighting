@@ -37,4 +37,4 @@ void (*patterns[NUM_PATTERNS])(void);
 // Globals //
 CRGB leds[NUM_LEDS_TOTAL]; // Array of all leds taken as one strip, from the inner right corner and going clockwise
 int currentPatternIndex;
-bool escape; // Should we be escaping from a function? Used to do asynchronous pattern switching
+jmp_buf jumpPoint; // Used for escaping functions

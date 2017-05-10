@@ -1,7 +1,6 @@
 void pattern_fire() {
   int x;
   while (true) {
-    if (escape) return;
     uint16_t brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
     FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {

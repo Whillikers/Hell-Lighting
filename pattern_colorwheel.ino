@@ -4,8 +4,6 @@ void pattern_colorwheel() {
   int pos = 0;
   
   while (true) {
-    if (escape) return;
-
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[transform(i)] = CHSV(map(i + pos, 0, NUM_LEDS_TOTAL, 0, 255), 255, 255);
     }

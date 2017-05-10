@@ -4,8 +4,6 @@ void pattern_colorloop() {
   int col = 0;
   
   while (true) {
-    if (escape) return;
-
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       leds[transform(i)] = CHSV(col, 255, 255);
     }

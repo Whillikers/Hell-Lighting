@@ -9,9 +9,7 @@ void pattern_white_stars(){
   clearLEDs();
   FastLED.setBrightness(BRIGHTNESS_MAX / 2);
 
-  while (true) {
-    if (escape) return;
-    
+  while (true) {    
     int scalenumber = 100; // determines how many total operations are conducted per tick of the program. 
     int specialFrequency = 20000; // how many ticks (on average) between special events.
     int potValue = analogRead(PIN_POT);
