@@ -18,8 +18,8 @@
 #define LEFT_END 616
 #define FAR_START 617
 #define FAR_END 651
-#define RIGHT_START 652
-#define RIGHT_END 1222
+#define RIGHT_START 1222
+#define RIGHT_END 652
 
 // Hardware Constants //
 #define POT_MAX 1023

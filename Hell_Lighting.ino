@@ -37,6 +37,7 @@ void setup() {
   patterns[6] = pattern_colorloop;
   patterns[7] = pattern_trains;
   patterns[8] = pattern_colorwheel;
+  patterns[9] = pattern_race;
   
   // Rest of setup is handled in reset() //
   reset();
