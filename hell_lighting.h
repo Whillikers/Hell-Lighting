@@ -9,7 +9,17 @@
 #define NUM_LEDS_4 251
 #define NUM_LEDS_MAX 355
 #define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
-#define NUM_PATTERNS 9
+#define NUM_PATTERNS 10
+
+// System topology by transformed index //
+#define ARCH_START 0
+#define ARCH_END 43
+#define LEFT_START 44
+#define LEFT_END 616
+#define FAR_START 617
+#define FAR_END 651
+#define RIGHT_START 652
+#define RIGHT_END 1222
 
 // Hardware Constants //
 #define POT_MAX 1023
