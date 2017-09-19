@@ -1,6 +1,6 @@
 #include "hell_lighting.h"
 
-#define NUM_PATTERNS 10
+#define NUM_PATTERNS 11
 
 // Pattern list //
 void (*patterns[NUM_PATTERNS])(void);
@@ -14,6 +14,7 @@ extern void pattern_colorloop();
 extern void pattern_trains();
 extern void pattern_colorwheel();
 extern void pattern_race();
+extern void pattern_drift();
 
 void patternInit() {
   patterns[0] = pattern_color;
@@ -26,5 +27,6 @@ void patternInit() {
   patterns[7] = pattern_trains;
   patterns[8] = pattern_colorwheel;
   patterns[9] = pattern_race;
+  patterns[10] = pattern_drift;
 }
 
