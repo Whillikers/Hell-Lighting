@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 void pattern_white_stars(){
   /*
   This is a night sky pattern that more or less randomly turns led's on and off. 

@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 // A Turing-complete pattern //
 void pattern_rule110() {
   clearLEDs();

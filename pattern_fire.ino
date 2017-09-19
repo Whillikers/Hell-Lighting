@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 void pattern_fire() {
   int x;
   while (true) {

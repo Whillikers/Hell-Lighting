@@ -38,8 +38,27 @@ void loop() {}
 
 void runPattern() {
   setjmp(jumpPoint);
+  
+  #ifdef DEBUG
+  Serial.println("Running a new pattern:");
+  Serial.println(currentPatternIndex);
+  #endif
+  
   interrupts();
-  patterns[currentPatternIndex]();
+
+  int counter = 0;
+
+  Pattern* currentPattern = patterns[currentPatternIndex];
+  currentPattern->init();
+  while (!currentPattern->isFinished()) {
+    currentPattern->loop();
+  }
+  
+  counter = 0;
+  currentPattern->cleanup();
+  currentPatternIndex++;
+  if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
+  longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
 
 void reset() {
@@ -51,29 +70,6 @@ void reset() {
   currentPatternIndex = 0;
   clearLEDs();
   runPattern();
-}
-
-// Sets all active LEDs to black //
-void clearLEDs() {
-  #ifdef DEBUG
-  Serial.println("Clearing active LEDs");
-  #endif
-
-  for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
-    leds[i] = CRGB::Black;
-  }
-  FastLED.show();
-}
-
-// Helper functions //
-// Take an LED index and transform it, given that the third and fourth strips are reversed, into an index which will work on the led array //
-int transform(int index) {
-  // Enforce wrapping
-  if (index < 0) index += NUM_LEDS_TOTAL;
-  if (index >= NUM_LEDS_TOTAL) index -= NUM_LEDS_TOTAL;
-  if (index < NUM_LEDS_1 + NUM_LEDS_2) return index;
-  if (index < NUM_LEDS_1 + NUM_LEDS_2 + NUM_LEDS_3) return 2 * NUM_LEDS_1 + 2 * NUM_LEDS_2 + NUM_LEDS_3 - index - 1;
-  return 2 * NUM_LEDS_1 + 2 * NUM_LEDS_2 + 2 * NUM_LEDS_3 + NUM_LEDS_4 - index - 1;
 }
 
 // Enable pin-change interrupts on arbitrary pins; taken from http://playground.arduino.cc/Main/PinChangeInterrupt //
@@ -101,6 +97,7 @@ ISR (PCINT1_vect) {}
 // Button-press behaviors //
 void nextButton() {
   if (!digitalRead(PIN_BUTTON_NEXT)) return; // We only want to detect a rising edge
+  patterns[currentPatternIndex]->cleanup();
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
@@ -108,6 +105,7 @@ void nextButton() {
 
 void previousButton() {
   if (!digitalRead(PIN_BUTTON_PREV)) return; // We only want to detect a rising edge
+  patterns[currentPatternIndex]->cleanup();
   currentPatternIndex--;
   if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
   longjmp(jumpPoint, 1); // End the current pattern and load a new one

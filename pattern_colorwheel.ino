@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 void pattern_colorwheel() {
   clearLEDs();
   FastLED.setBrightness(BRIGHTNESS_MAX);

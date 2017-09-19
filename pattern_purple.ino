@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 void pattern_purple() {
   clearLEDs();
   int g = 0;

@@ -4,9 +4,9 @@
  *  not commonly used elsewhere.
  */
 
-#include "hardware.h"
-#include "topology.h"
-#include "common.h"
+#pragma once
+
+#include "pattern.h"
 
 // Debug switches //
 // #define DEBUG 1

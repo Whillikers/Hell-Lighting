@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 // Displays a number of points with tails//
 void pattern_trains() {
   clearLEDs();

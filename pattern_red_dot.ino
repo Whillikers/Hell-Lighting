@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 void pattern_red_dot() {
   /*
   This pattern sends a small red pulse traveling around in a circle. Has persistence

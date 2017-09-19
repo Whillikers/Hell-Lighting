@@ -7,7 +7,7 @@
 #pragma once
 
 // Generally useful constants
-#define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
+#define NUM_LEDS_TOTAL (332 + 285 + 355 + 254)
 
 // Locations by transformed index //
 #define ARCH_START 0
@@ -22,6 +22,6 @@
 // Strip parameters //
 #define NUM_LEDS_1 332
 #define NUM_LEDS_2 285
-#define NUM_LEDS_3 355
-#define NUM_LEDS_4 251
-#define NUM_LEDS_MAX 355
+#define NUM_LEDS_3 356 //355
+#define NUM_LEDS_4 254 // 251
+#define NUM_LEDS_MAX 356

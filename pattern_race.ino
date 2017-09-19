@@ -1,3 +1,5 @@
+#include "pattern.h"
+
 void pattern_race() {
   clearLEDs();
   FastLED.setBrightness(BRIGHTNESS_MAX);
