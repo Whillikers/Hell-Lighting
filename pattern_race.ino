@@ -1,20 +1,12 @@
-#include "pattern.h"
+#include "pattern_race.h"
 
-void pattern_race() {
+void Pattern_Race::init() {
   clearLEDs();
   FastLED.setBrightness(BRIGHTNESS_MAX);
-  int s = min(abs(LEFT_END - LEFT_START), abs(RIGHT_END - RIGHT_START));
-  const int stp = 10;
-  const int shifts = 50;
-  const int maxSpeed = 10;
-  float red, blue;
-  int redSpeed, blueSpeed;
-  int redSpeedLocations[shifts];
-  int blueSpeedLocations[shifts];
-  int redSpeeds[shifts];
-  int blueSpeeds[shifts];
-  
-  while (true) {
+  s = min(abs(LEFT_END - LEFT_START), abs(RIGHT_END - RIGHT_START));
+}
+
+void Pattern_Race::loop() {
     // Initialize values //
     red = 0;
     blue = 0;
@@ -62,7 +54,7 @@ void pattern_race() {
         if (redSpeedLocations[j] == i) redSpeed = redSpeeds[j];
         if (blueSpeedLocations[j] == i) blueSpeed = blueSpeeds[j];
       }
-      
+
       leds[transform(LEFT_START + (int) red)] = CRGB::Red;
       leds[transform(RIGHT_START - (int) blue)] = CRGB::Blue;
       FastLED.show();
@@ -95,5 +87,4 @@ void pattern_race() {
         delay(500);
       }
     }
-  }
 }

@@ -1,8 +1,11 @@
-#include "pattern.h"
+#include "pattern_fire.h"
 
-void pattern_fire() {
-  int x;
-  while (true) {
+void Pattern_Fire::init() {
+    clearLEDs();
+    FastLED.setBrightness(BRIGHTNESS_MAX);
+}
+
+void Pattern_Fire::loop() {
     uint16_t brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
     FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {
@@ -15,8 +18,7 @@ void pattern_fire() {
         leds[i].b = 0;
       }
     }
-  
+
     FastLED.show();
     delay(1);
-  }
 }
