@@ -21,14 +21,14 @@ Pattern* patterns[NUM_PATTERNS];
 void patternInit() {
     patterns[0] = (Pattern*) new Pattern_Color();
     patterns[1] = (Pattern*) new Pattern_Colorloop();
-    patterns[1] = (Pattern*) new Pattern_Colorwheel();
-    patterns[2] = (Pattern*) new Pattern_Drift();
-    patterns[3] = (Pattern*) new Pattern_Fire();
-    patterns[4] = (Pattern*) new Pattern_Purple();
-    patterns[5] = (Pattern*) new Pattern_Race();
-    patterns[6] = (Pattern*) new Pattern_Red_Dot();
-    patterns[7] = (Pattern*) new Pattern_Rule110();
-    patterns[8] = (Pattern*) new Pattern_Trains();
-    patterns[9] = (Pattern*) new Pattern_White_Stars();
+    patterns[2] = (Pattern*) new Pattern_Colorwheel();
+    patterns[3] = (Pattern*) new Pattern_Drift();
+    patterns[4] = (Pattern*) new Pattern_Fire();
+    patterns[5] = (Pattern*) new Pattern_Purple();
+    patterns[6] = (Pattern*) new Pattern_Race();
+    patterns[7] = (Pattern*) new Pattern_Red_Dot();
+    patterns[8] = (Pattern*) new Pattern_Rule110();
+    patterns[9] = (Pattern*) new Pattern_Trains();
+    patterns[10] = (Pattern*) new Pattern_White_Stars();
 }
 
