@@ -6,11 +6,32 @@
 
 #pragma once
 
-#include "pattern.h"
+#include "common.h"
 
 // Debug switches //
 // #define DEBUG 1
 // #define DEBUG_POT 1
+
+// System parameters //
+#define NUM_LEDS_1 332
+#define NUM_LEDS_2 285
+#define NUM_LEDS_3 355
+#define NUM_LEDS_4 251
+#define NUM_LEDS_MAX 355
+#define NUM_LEDS_TOTAL (332 + 285 + 355 + 251)
+
+// System topology by transformed index //
+#define ARCH_START 0
+#define ARCH_END 43
+#define LEFT_START 44
+#define LEFT_END 616
+#define FAR_START 617
+#define FAR_END 651
+#define RIGHT_START 1222
+#define RIGHT_END 652
+
+// Hardware Constants //
+#define POT_MAX 1023
 
 // Pins //
 // Interface //
@@ -26,6 +47,7 @@
 #define PIN_LED_4 7
 
 // Settings //
+#define BRIGHTNESS_MAX 100
 #define PATTERN_DEFAULT color
 
 // Globals //

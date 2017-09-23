@@ -1,4 +1,4 @@
-#include "pattern.h"
+#include "pattern_colorloop.h"
 
 void Pattern_Colorloop::init() {   
     clearLEDs();

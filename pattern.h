@@ -7,10 +7,6 @@
 
 #pragma once
 
-#include "common.h"
-#include "hardware.h"
-#include "topology.h"
-
 class Pattern {
 public:
     /*

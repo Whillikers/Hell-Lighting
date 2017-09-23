@@ -1,5 +1,6 @@
 #include "hell_lighting.h"
 
+#include "pattern.h"
 #include "pattern_color.h"
 #include "pattern_colorloop.h"
 
