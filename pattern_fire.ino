@@ -10,15 +10,15 @@ void Pattern_Fire::loop() {
     FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {
       if (leds[i].r == 0) { // This point has not yet been initialized
-        leds[i] = CRGB(random(100, 255), random(0, 50), 0);
+        leds[i] = CRGB(random8(100, 255), random8(0, 50), 0);
       } else { // Standard fire algorithm
         x = ((leds[i-1].r - leds[i].r) - (leds[i + 1].r - leds[i].r)) / 4;
-        leds[i].r = x + random(100, 255);
-        leds[i].g = random(0, 20);
+        leds[i].r = x + random8(100, 255);
+        leds[i].g = random8(0, 20);
         leds[i].b = 0;
       }
     }
 
     FastLED.show();
-    delay(1);
+    delay(31);
 }

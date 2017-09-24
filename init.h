@@ -12,10 +12,11 @@
 #include "pattern_rule110.h"
 #include "pattern_trains.h"
 #include "pattern_white_stars.h"
+#include "pattern_red_255.h"
 #include "pattern_flicker.h"
 #include "pattern_binary.h"
 
-#define NUM_PATTERNS 13
+#define NUM_PATTERNS 14
 
 // Pattern list //
 Pattern* patterns[NUM_PATTERNS];
@@ -34,5 +35,6 @@ void patternInit() {
     patterns[10] = (Pattern*) new Pattern_White_Stars();
     patterns[11] = (Pattern*) new Pattern_Flicker();
     patterns[12] = (Pattern*) new Pattern_Binary();
+    patterns[13] = (Pattern*) new Pattern_red_255();
 }
 
