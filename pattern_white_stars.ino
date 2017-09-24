@@ -31,7 +31,7 @@ void Pattern_White_Stars::loop() {
         continue;
       }
 
-      int r = random(1024);
+      int r = random8(1024);
       if (r > potValue) leds[i] = CRGB::White;
     }
 
