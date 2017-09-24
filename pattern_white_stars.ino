@@ -14,11 +14,11 @@ void Pattern_White_Stars::init() {
 }
 
 void Pattern_White_Stars::loop() {
-    potValue = analogRead(PIN_POT);
+    potValue = analogRead(PIN_POT) * 3;
 
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       if (leds[i].r != 0) { //Fade
-        int fade = 50;
+        int fade = 20;
 
         if (leds[i].r <= fade) {
           leds[i] = CRGB::Black;
@@ -31,7 +31,7 @@ void Pattern_White_Stars::loop() {
         continue;
       }
 
-      int r = random8(1024);
+      int r = random16(1024);
       if (r > potValue) leds[i] = CRGB::White;
     }
 
