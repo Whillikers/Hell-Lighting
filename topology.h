@@ -7,7 +7,7 @@
 #pragma once
 
 // Generally useful constants
-#define NUM_LEDS_TOTAL (332 + 285 + 355 + 254)
+#define NUM_LEDS_TOTAL (332 + 285 + 355 + 254) // 1226
 
 // Locations by transformed index //
 #define ARCH_START 0
