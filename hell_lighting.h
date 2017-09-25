@@ -10,7 +10,7 @@
 #include <setjmp.h>
 
 // Debug switches //
-#define DEBUG 1
+// #define DEBUG 1
 // #define DEBUG_POT 1
 
 // Settings //

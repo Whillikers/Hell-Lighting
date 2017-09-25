@@ -34,4 +34,3 @@ void clearLEDs();
  * the led array
  */
 int transform(int index);
-

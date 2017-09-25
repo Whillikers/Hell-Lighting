@@ -1,3 +1,9 @@
+/*
+ * init.h:
+ *  Defines the set of patterns and their order, as well as initializing
+ *  patterns.
+ */
+
 #pragma once
 
 #include "hell_lighting.h"

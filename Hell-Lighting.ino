@@ -1,3 +1,9 @@
+/*
+ * Hell-Lighting.ino:
+ *   Internal code for the system's main operation, including running patterns
+ *   and handling interface interaction.
+ */
+
 #include "init.h"
 
 // Define led array
@@ -59,9 +65,9 @@ void runPattern() {
   while (!currentPattern->isFinished()) {
     currentPattern->loop();
 
-    /* #ifdef DEBUG */
-    /* Serial.println("Pattern finished loop frame"); */
-    /* #endif */
+    #ifdef DEBUG
+    Serial.println("Pattern finished loop frame");
+    #endif
   }
 
   #ifdef DEBUG
@@ -77,7 +83,7 @@ void runPattern() {
 
 void reset() {
   #ifdef DEBUG
-  Serial.println("Resetting");
+  Serial.println("Resetting system");
   #endif
 
   // Initialize values //
