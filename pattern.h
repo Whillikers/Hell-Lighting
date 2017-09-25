@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "common.h"
+
 class Pattern {
 public:
     /*

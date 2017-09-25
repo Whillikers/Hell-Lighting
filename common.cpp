@@ -4,6 +4,8 @@
  *  common across patterns.
  */
 
+#include "common.h"
+
 // Sets all active LEDs to black //
 void clearLEDs() {
   #ifdef DEBUG

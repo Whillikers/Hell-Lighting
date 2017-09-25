@@ -1,6 +1,7 @@
-#include <FastLED.h>
-#include <setjmp.h>
 #include "init.h"
+
+// Define led array
+CRGB leds[NUM_LEDS_TOTAL];
 
 // Automatic functions //
 void setup() {
@@ -9,9 +10,9 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Beginning setup");
   #endif
-  
+
   // Interface setup //
-  // Assign pins //      
+  // Assign pins //
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
@@ -29,7 +30,7 @@ void setup() {
   // Initialize pattern ordering //
   currentPatternIndex = 0;
   patternInit();
-  
+
   // Rest of setup is handled in reset() //
   reset();
 }
@@ -38,22 +39,35 @@ void loop() {}
 
 void runPattern() {
   setjmp(jumpPoint);
-  
+
   #ifdef DEBUG
   Serial.println("Running a new pattern:");
   Serial.println(currentPatternIndex);
   #endif
-  
+
   interrupts();
 
   int counter = 0;
 
   Pattern* currentPattern = patterns[currentPatternIndex];
   currentPattern->init();
+
+  #ifdef DEBUG
+  Serial.println("Pattern finished init");
+  #endif
+
   while (!currentPattern->isFinished()) {
     currentPattern->loop();
+
+    /* #ifdef DEBUG */
+    /* Serial.println("Pattern finished loop frame"); */
+    /* #endif */
   }
-  
+
+  #ifdef DEBUG
+  Serial.println("Pattern finished internally");
+  #endif
+
   counter = 0;
   currentPattern->cleanup();
   currentPatternIndex++;
@@ -65,7 +79,7 @@ void reset() {
   #ifdef DEBUG
   Serial.println("Resetting");
   #endif
-  
+
   // Initialize values //
   currentPatternIndex = 0;
   clearLEDs();
@@ -80,7 +94,7 @@ void pciSetup(byte pin) {
 }
 
 // This interrupt handles the "previous button" behavior on pin D11 //
-ISR (PCINT0_vect) { // Pin-interrupt handler for D8 to D13    
+ISR (PCINT0_vect) { // Pin-interrupt handler for D8 to D13
   noInterrupts();
   previousButton();
 }

@@ -6,6 +6,17 @@
 
 #pragma once
 
+#include "topology.h"
+#include "hardware.h"
+
+#include <FastLED.h>
+
+/*
+ * Globals
+ */
+// Array of all leds taken as one strip, from the inner right corner and going clockwise
+extern CRGB leds[NUM_LEDS_TOTAL];
+
 /*
  * Constants
  */
