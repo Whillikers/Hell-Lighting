@@ -14,6 +14,7 @@
 #include "pattern_colorwheel.h"
 #include "pattern_drift.h"
 #include "pattern_fire.h"
+#include "pattern_gameoflife.h"
 #include "pattern_purple.h"
 #include "pattern_race.h"
 #include "pattern_red_dot.h"
@@ -30,7 +31,8 @@
 Pattern* patterns[NUM_PATTERNS];
 
 void patternInit() {
-    patterns[0] = (Pattern*) new Pattern_Color();
+    patterns[0] = (Pattern*) new Pattern_GameOfLife();
+    //patterns[0] = (Pattern*) new Pattern_Color();
     patterns[1] = (Pattern*) new Pattern_Colorloop();
     patterns[2] = (Pattern*) new Pattern_Colorwheel();
     patterns[3] = (Pattern*) new Pattern_Drift();
