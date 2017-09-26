@@ -13,6 +13,7 @@
 #include "pattern_colorloop.h"
 #include "pattern_colorwheel.h"
 #include "pattern_drift.h"
+#include "pattern_drops.h"
 #include "pattern_fire.h"
 #include "pattern_purple.h"
 #include "pattern_race.h"
@@ -24,7 +25,7 @@
 #include "pattern_flicker.h"
 #include "pattern_binary.h"
 
-#define NUM_PATTERNS 12
+#define NUM_PATTERNS 13
 
 // Pattern list //
 Pattern* patterns[NUM_PATTERNS];
@@ -42,7 +43,8 @@ void patternInit() {
     patterns[9] = (Pattern*) new Pattern_Trains();
     patterns[10] = (Pattern*) new Pattern_White_Stars();
     patterns[11] = (Pattern*) new Pattern_Flicker();
-    // patterns[12] = (Pattern*) new Pattern_Binary();
-    // patterns[13] = (Pattern*) new Pattern_red_255();
+    patterns[12] = (Pattern*) new Pattern_Drops();
+    // patterns[13] = (Pattern*) new Pattern_Binary();
+    // patterns[14] = (Pattern*) new Pattern_red_255();
 }
 
