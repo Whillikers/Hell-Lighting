@@ -9,7 +9,6 @@
 #include "topology.h"
 #include "hardware.h"
 
-#define FASTLED_INTERNAL
 #include <FastLED.h>
 
 /*

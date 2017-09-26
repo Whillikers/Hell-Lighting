@@ -31,8 +31,7 @@
 Pattern* patterns[NUM_PATTERNS];
 
 void patternInit() {
-    patterns[0] = (Pattern*) new Pattern_GameOfLife();
-    //patterns[0] = (Pattern*) new Pattern_Color();
+    patterns[0] = (Pattern*) new Pattern_Color();
     patterns[1] = (Pattern*) new Pattern_Colorloop();
     patterns[2] = (Pattern*) new Pattern_Colorwheel();
     patterns[3] = (Pattern*) new Pattern_Drift();
