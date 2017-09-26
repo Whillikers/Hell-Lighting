@@ -1,3 +1,6 @@
+//Randomly colored drops expand from a point and slow down,
+//and are then set back to black from the middle out
+
 #include "pattern_drops.h"
 
 Drop newDrop() {

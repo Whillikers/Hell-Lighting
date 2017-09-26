@@ -1,3 +1,6 @@
+//Randomly sets lights to on or off,
+//then updates them based on number of neighbors
+
 #include "pattern_gameoflife.h"
 
 void Pattern_GameOfLife::init() {
