@@ -7,50 +7,57 @@ void Pattern_Trains::init() {
   FastLED.setBrightness(BRIGHTNESS_MAX);
 
   // Randomly initialize speeds, colors, and positions //
-  for (int i = 0; i < numTrains; i++) {
-    trainPos[i] = random(0, NUM_LEDS_TOTAL - 1);
-    trainSpeeds[i] = random(-10, 10);
-    if (trainSpeeds[i] == 0) trainSpeeds[i] = 1;
-    trainColors[i] = random(0, 255);
+  for (int i = 0; i < NUM_TRAINS; i++) {
+    Train* train = trains + i;
+    train->pos = random(0, NUM_LEDS_TOTAL);
+    train->speed = random(1, MAX_SPEED);
+    if (random(0, 2)) train-> speed *= -1;
+    train->hue = random(0, 256);
+    train->acceleration = 0;
   }
+  cycle = ACCELERATION_CYCLE;
 }
 
 void Pattern_Trains::loop() {
-    for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
-      leds[i] = CRGB::Black;
+  for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
+    leds[i] = CRGB::Black;
+  }
+
+  // Update positions and colors //
+  for (int i = 0; i < NUM_TRAINS; i++) {
+    if (i > map(analogRead(PIN_POT), 0, POT_MAX, 0, NUM_TRAINS)) break; // Dial selects how many trains are visible and updates
+
+    Train* train = trains + i;
+    train->pos = (train->pos + train->speed + NUM_LEDS_TOTAL) % NUM_LEDS_TOTAL;
+
+    leds[transform(train->pos)] = CHSV(train->hue, 255, 255);
+    int trainLength = train->speed * TRAIL_LENGTH;
+    for (int j = train->pos; j != train->pos - trainLength; j--) {
+      CRGB newCol = CHSV(train->hue, 255, map(j - train->pos, 0, trainLength, 0, 255));
+      leds[transform(j)].r += newCol.r;
+      leds[transform(j)].g += newCol.g;
+      leds[transform(j)].b += newCol.b;
     }
+  }
 
-    // Update positions and colors //
-    for (int i = 0; i < numTrains; i++) {
-      if (i > map(analogRead(PIN_POT), 0, POT_MAX, 0, numTrains)) break; // Dial selects how many trains are visible and updates
+  // cycle--;
+  // if (!cycle) {
+  //   cycle = ACCELERATION_CYCLE;
+  //   for (int i = 0; i < NUM_TRAINS; i++) {
+  //     Train* train = trains + i;
+  //     if (train->acceleration) {
+  //       train->speed += train->acceleration;
+  //       if (!train->speed) train->acceleration = 0;
+  //     }
+  //     else { //not accelerating
+  //       if (!random(0, ACCELERATE_CHANCE)) { //start accelerating
+  //         if (train->speed) train->acceleration = train->speed > 0 ? -1 : 1; //not stopped
+  //         else train->acceleration = random(0, 2) ? -1 : 1; //stopped
+  //       }
+  //     }
+  //   }
+  // }
 
-      trainPos[i] += trainSpeeds[i];
-
-      if (trainPos[i] >= NUM_LEDS_TOTAL) trainPos[i] -= NUM_LEDS_TOTAL;
-      if (trainPos[i] < 0) trainPos[i] += NUM_LEDS_TOTAL;
-
-      leds[transform(trainPos[i])] = CHSV(trainColors[i], 255, 255);
-      // Forward-moving trails //
-      if (trainSpeeds[i] > 0) {
-        for (int j = trainPos[i]; j > trainPos[i] - trainSpeeds[i] * trailLength; j--) {
-          CRGB newCol = CHSV(trainColors[i], 255, map(j - trainPos[i], 0, trainSpeeds[i] * trailLength, 0, 255));
-          leds[transform(j)].r += newCol.r;
-          leds[transform(j)].g += newCol.g;
-          leds[transform(j)].b += newCol.b;
-        }
-
-        continue;
-      }
-
-      // Backward-moving trails //
-      for (int j = trainPos[i]; j < trainPos[i] - trainSpeeds[i] * trailLength; j++) {
-          CRGB newCol = CHSV(trainColors[i], 255, map(j - trainPos[i], 0, trainSpeeds[i] * trailLength, 0, 255));
-          leds[transform(j)].r += newCol.r;
-          leds[transform(j)].g += newCol.g;
-          leds[transform(j)].b += newCol.b;
-        }
-    }
-
-    FastLED.show();
-    delay(10);
+  FastLED.show();
+  delay(10);
 }
