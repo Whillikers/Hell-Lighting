@@ -2,55 +2,85 @@
 
 #include "pattern_trains.h"
 
+int signum(int input) {
+  if (input > 0) return 1;
+  if (input < 0) return -1;
+  return 0;
+}
+
+Pattern_Trains::Pattern_Trains(bool accel) {
+  accelerate = accel;
+}
+int Pattern_Trains::targetTail(Train *train) {
+  return train->speed * TRAIL_LENGTH;
+}
+
 void Pattern_Trains::init() {
   clearLEDs();
   FastLED.setBrightness(BRIGHTNESS_MAX);
 
   // Randomly initialize speeds, colors, and positions //
-  for (int i = 0; i < numTrains; i++) {
-    trainPos[i] = random(0, NUM_LEDS_TOTAL - 1);
-    trainSpeeds[i] = random(-10, 10);
-    if (trainSpeeds[i] == 0) trainSpeeds[i] = 1;
-    trainColors[i] = random(0, 255);
+  for (int i = 0; i < NUM_TRAINS; i++) {
+    Train* train = trains + i;
+    train->pos = random(0, NUM_LEDS_TOTAL);
+    train->speed = random(1, MAX_SPEED);
+    if (random(0, 2)) train->speed *= -1;
+    train->topSpeed = train->speed;
+    train->tail = targetTail(train);
+    train->hue = random(0, 256);
+    train->acceleration = 0;
   }
+  cycle = ACCELERATION_CYCLE;
 }
 
 void Pattern_Trains::loop() {
-    for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
-      leds[i] = CRGB::Black;
+  for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
+    leds[i] = CRGB::Black;
+  }
+
+  // Update positions and colors //
+  for (int i = 0; i < NUM_TRAINS; i++) {
+    if (i > map(analogRead(PIN_POT), 0, POT_MAX, 0, NUM_TRAINS)) break; // Dial selects how many trains are visible and updates
+
+    Train* train = trains + i;
+    train->pos = (train->pos + train->speed + NUM_LEDS_TOTAL) % NUM_LEDS_TOTAL;
+
+    leds[transform(train->pos)] = CHSV(train->hue, 255, 255);
+    train->tail += signum(targetTail(train) - train->tail);
+    int tailSign = -signum(train->tail);
+    for (int j = train->pos; j != train->pos - train->tail; j += tailSign) {
+      CRGB newCol = CHSV(train->hue, 255, map(j - train->pos, 0, train->tail, 0, 255));
+      leds[transform(j)].r += newCol.r;
+      leds[transform(j)].r /= 2;
+      leds[transform(j)].g += newCol.g;
+      leds[transform(j)].g /= 2;
+      leds[transform(j)].b += newCol.b;
+      leds[transform(j)].b /= 2;
     }
+  }
 
-    // Update positions and colors //
-    for (int i = 0; i < numTrains; i++) {
-      if (i > map(analogRead(PIN_POT), 0, POT_MAX, 0, numTrains)) break; // Dial selects how many trains are visible and updates
-
-      trainPos[i] += trainSpeeds[i];
-
-      if (trainPos[i] >= NUM_LEDS_TOTAL) trainPos[i] -= NUM_LEDS_TOTAL;
-      if (trainPos[i] < 0) trainPos[i] += NUM_LEDS_TOTAL;
-
-      leds[transform(trainPos[i])] = CHSV(trainColors[i], 255, 255);
-      // Forward-moving trails //
-      if (trainSpeeds[i] > 0) {
-        for (int j = trainPos[i]; j > trainPos[i] - trainSpeeds[i] * trailLength; j--) {
-          CRGB newCol = CHSV(trainColors[i], 255, map(j - trainPos[i], 0, trainSpeeds[i] * trailLength, 0, 255));
-          leds[transform(j)].r += newCol.r;
-          leds[transform(j)].g += newCol.g;
-          leds[transform(j)].b += newCol.b;
+  if (accelerate) {
+    cycle--;
+    if (!cycle) {
+      cycle = ACCELERATION_CYCLE;
+      for (int i = 0; i < NUM_TRAINS; i++) {
+        Train* train = trains + i;
+        if (train->acceleration) {
+          train->speed += train->acceleration;
+          if (!train->speed || train->speed == train->topSpeed) train->acceleration = 0;
         }
-
-        continue;
+        else { //not accelerating
+          int chance = train->speed ? DECELERATE_CHANCE : ACCELERATE_CHANCE;
+          if (!random(0, chance)) { //begin acceleration/deceleration
+            int speedSign = signum(train->topSpeed);
+            if (train->speed) train->acceleration = -speedSign; //not stopped
+            else train->acceleration = speedSign; //stopped
+          }
+        }
       }
-
-      // Backward-moving trails //
-      for (int j = trainPos[i]; j < trainPos[i] - trainSpeeds[i] * trailLength; j++) {
-          CRGB newCol = CHSV(trainColors[i], 255, map(j - trainPos[i], 0, trainSpeeds[i] * trailLength, 0, 255));
-          leds[transform(j)].r += newCol.r;
-          leds[transform(j)].g += newCol.g;
-          leds[transform(j)].b += newCol.b;
-        }
     }
+  }
 
-    FastLED.show();
-    delay(10);
+  FastLED.show();
+  delay(10);
 }

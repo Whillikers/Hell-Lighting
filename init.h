@@ -25,7 +25,7 @@
 #include "pattern_flicker.h"
 #include "pattern_binary.h"
 
-#define NUM_PATTERNS 13
+#define NUM_PATTERNS 14
 
 // Pattern list //
 Pattern* patterns[NUM_PATTERNS];
@@ -40,10 +40,11 @@ void patternInit() {
     patterns[6] = (Pattern*) new Pattern_Race();
     patterns[7] = (Pattern*) new Pattern_Red_Dot();
     patterns[8] = (Pattern*) new Pattern_Rule110();
-    patterns[9] = (Pattern*) new Pattern_Trains();
+    patterns[9] = (Pattern*) new Pattern_Trains(false);
     patterns[10] = (Pattern*) new Pattern_White_Stars();
     patterns[11] = (Pattern*) new Pattern_Flicker();
     patterns[12] = (Pattern*) new Pattern_Drops();
+    patterns[13] = (Pattern*) new Pattern_Trains(true);
     // patterns[13] = (Pattern*) new Pattern_Binary();
     // patterns[14] = (Pattern*) new Pattern_red_255();
 }
