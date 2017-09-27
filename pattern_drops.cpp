@@ -9,7 +9,7 @@ Drop newDrop() {
   drop.color = CHSV(random(0, 256), 255, 255);
   drop.receding = false;
   drop.start = millis();
-  drop.duration = random(MAX_DURATION, MAX_DURATION);
+  drop.duration = random(MIN_DURATION, MAX_DURATION);
   drop.maxSize = random(0, MAX_SIZE);
   return drop;
 }
