@@ -9,6 +9,7 @@
 #include "hell_lighting.h"
 
 #include "pattern.h"
+#include "pattern_binary.h"
 #include "pattern_color.h"
 #include "pattern_colorloop.h"
 #include "pattern_colorwheel.h"
@@ -25,7 +26,7 @@
 #include "pattern_flicker.h"
 #include "pattern_binary.h"
 
-#define NUM_PATTERNS 14
+#define NUM_PATTERNS 15
 
 // Pattern list //
 Pattern* patterns[NUM_PATTERNS];
@@ -45,7 +46,7 @@ void patternInit() {
     patterns[11] = (Pattern*) new Pattern_Flicker();
     patterns[12] = (Pattern*) new Pattern_Drops();
     patterns[13] = (Pattern*) new Pattern_Trains(true);
-    // patterns[13] = (Pattern*) new Pattern_Binary();
-    // patterns[14] = (Pattern*) new Pattern_red_255();
+    patterns[14] = (Pattern*) new Pattern_Binary();
+    // patterns[15] = (Pattern*) new Pattern_red_255();
 }
 

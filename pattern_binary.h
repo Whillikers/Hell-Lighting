@@ -2,11 +2,12 @@
 
 #include "pattern.h"
 
+#define BITS 100
+
 class Pattern_Binary: Pattern {
 public:
     void loop();
     void init();
 private:
-    bool bits[1000];
-    bool carry[1000];
+    bool bits[BITS];
 };
