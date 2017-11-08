@@ -12,7 +12,7 @@
 // Pins //
 // Interface //
 #define PIN_BUTTON_RESET 2
-#define PIN_BUTTON_NEXT 4
+#define PIN_BUTTON_NEXT 4 // TODO: Rewire to an interrupt pin
 #define PIN_BUTTON_PREV 11
 // Inputs //
 #define PIN_POT A0

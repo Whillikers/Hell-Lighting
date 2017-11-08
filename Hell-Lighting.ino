@@ -23,7 +23,7 @@ void setup() {
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
   // Set up interrupts //
-  pciSetup(PIN_BUTTON_NEXT); // TODO: Rewire to an interrupt pin
+  pciSetup(PIN_BUTTON_NEXT);
   pciSetup(PIN_BUTTON_PREV);
 
   // LED setup //
