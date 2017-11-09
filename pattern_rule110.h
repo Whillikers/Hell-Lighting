@@ -3,7 +3,7 @@
 #include "pattern.h"
 //#include "topology.h" TODO: Find a way to include this
 
-class Pattern_Rule110: Pattern {
+class Pattern_Rule110: public Pattern {
 public:
     void loop();
     void init();

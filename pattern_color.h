@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_Color: Pattern {
+class Pattern_Color: public Pattern {
 public:
     void loop();
     void init();

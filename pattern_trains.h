@@ -11,11 +11,12 @@ typedef struct {
     int acceleration;
 } Train;
 
-class Pattern_Trains: Pattern {
+class Pattern_Trains: public Pattern {
 public:
     void loop();
     void init();
-    Pattern_Trains(bool accelerate);
+    // TODO: Recreate accelerating trains
+    Pattern_Trains();
 private:
     const static int NUM_TRAINS = 12;
     const static int TRAIL_LENGTH = 10;

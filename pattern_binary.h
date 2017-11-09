@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_Binary: Pattern {
+class Pattern_Binary: public Pattern {
 public:
     void loop();
     void init();

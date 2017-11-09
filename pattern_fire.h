@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_Fire: Pattern {
+class Pattern_Fire: public Pattern {
 public:
     void loop();
     void init();

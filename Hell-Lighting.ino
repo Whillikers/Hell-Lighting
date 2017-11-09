@@ -43,6 +43,7 @@ void setup() {
 
 void loop() {}
 
+// Initializes and runs a pattern continuously; called once per pattern switch
 void runPattern() {
   setjmp(jumpPoint);
 
@@ -55,7 +56,7 @@ void runPattern() {
 
   int counter = 0;
 
-  Pattern* currentPattern = patterns[currentPatternIndex];
+  currentPattern = patternFactories[currentPatternIndex]->getInstance();
   currentPattern->init();
 
   #ifdef DEBUG
@@ -75,10 +76,15 @@ void runPattern() {
   #endif
 
   counter = 0;
-  currentPattern->cleanup();
+  cleanupPattern();
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
+}
+
+void cleanupPattern() {
+    currentPattern->cleanup();
+    free(currentPattern);
 }
 
 void reset() {
@@ -92,7 +98,10 @@ void reset() {
   runPattern();
 }
 
-// Enable pin-change interrupts on arbitrary pins; taken from http://playground.arduino.cc/Main/PinChangeInterrupt //
+/*
+ * Enable pin-change interrupts on arbitrary pins;
+ * taken from http://playground.arduino.cc/Main/PinChangeInterrupt
+ */
 void pciSetup(byte pin) {
   *digitalPinToPCMSK(pin) |= bit (digitalPinToPCMSKbit(pin));  // enable pin
   PCIFR  |= bit (digitalPinToPCICRbit(pin)); // clear any outstanding interrupt
@@ -117,7 +126,7 @@ ISR (PCINT1_vect) {}
 // Button-press behaviors //
 void nextButton() {
   if (!digitalRead(PIN_BUTTON_NEXT)) return; // We only want to detect a rising edge
-  patterns[currentPatternIndex]->cleanup();
+  cleanupPattern();
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
@@ -125,7 +134,7 @@ void nextButton() {
 
 void previousButton() {
   if (!digitalRead(PIN_BUTTON_PREV)) return; // We only want to detect a rising edge
-  patterns[currentPatternIndex]->cleanup();
+  cleanupPattern();
   currentPatternIndex--;
   if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
   longjmp(jumpPoint, 1); // End the current pattern and load a new one

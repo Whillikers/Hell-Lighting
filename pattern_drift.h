@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_Drift: Pattern {
+class Pattern_Drift: public Pattern {
 public:
     void loop();
     void init();

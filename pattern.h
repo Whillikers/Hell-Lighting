@@ -46,3 +46,19 @@ public:
 
     virtual ~Pattern() {} // No destructor required for patterns
 };
+
+// General factory superclass
+class Factory {
+public:
+    virtual Pattern* getInstance() = 0;
+};
+
+// Create one factory per pattern type
+template<class pattern_type>
+class PatternFactory: Factory {
+public:
+    Pattern* getInstance() {
+        Pattern* pattern = new pattern_type();
+        return pattern;
+    }
+};

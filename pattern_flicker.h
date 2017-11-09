@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_Flicker: Pattern {
+class Pattern_Flicker: public Pattern {
 public:
     void loop();
     void init();

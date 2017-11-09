@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "common.h"
+#include "pattern.h"
 #include <setjmp.h>
 
 // Debug switches //
@@ -19,4 +19,5 @@
 
 // Internals //
 int currentPatternIndex;
+Pattern* currentPattern;
 jmp_buf jumpPoint; // Used for escaping functions

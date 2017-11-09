@@ -8,8 +8,9 @@ int signum(int input) {
   return 0;
 }
 
-Pattern_Trains::Pattern_Trains(bool accel) {
-  accelerate = accel;
+// TODO: Recreate accelerating trains
+Pattern_Trains::Pattern_Trains() {
+  accelerate = false;
 }
 int Pattern_Trains::targetTail(Train *train) {
   return train->speed * TRAIL_LENGTH;

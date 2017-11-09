@@ -17,7 +17,7 @@ typedef struct {
   double maxSize;
 } Drop;
 
-class Pattern_Drops: Pattern {
+class Pattern_Drops: public Pattern {
   public:
     void loop();
     void init();

@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_Colorwheel: Pattern {
+class Pattern_Colorwheel: public Pattern {
 public:
     void loop();
     void init();

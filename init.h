@@ -27,25 +27,27 @@
 
 #define NUM_PATTERNS 14
 
-// Pattern list //
-Pattern* patterns[NUM_PATTERNS];
+// Pattern factory list //
+Factory* patternFactories[NUM_PATTERNS];
 
 void patternInit() {
-    patterns[0] = (Pattern*) new Pattern_Color();
-    patterns[1] = (Pattern*) new Pattern_Colorloop();
-    patterns[2] = (Pattern*) new Pattern_Colorwheel();
-    patterns[3] = (Pattern*) new Pattern_Drift();
-    patterns[4] = (Pattern*) new Pattern_Fire();
-    patterns[5] = (Pattern*) new Pattern_Purple();
-    patterns[6] = (Pattern*) new Pattern_Race();
-    patterns[7] = (Pattern*) new Pattern_Red_Dot();
-    patterns[8] = (Pattern*) new Pattern_Rule110();
-    patterns[9] = (Pattern*) new Pattern_Trains(false);
-    patterns[10] = (Pattern*) new Pattern_White_Stars();
-    patterns[11] = (Pattern*) new Pattern_Flicker();
-    patterns[12] = (Pattern*) new Pattern_Drops();
-    patterns[13] = (Pattern*) new Pattern_Trains(true);
-    // patterns[13] = (Pattern*) new Pattern_Binary();
-    // patterns[14] = (Pattern*) new Pattern_red_255();
+    patternFactories[0] = (Factory*) new PatternFactory<Pattern_Color>();
+    patternFactories[1] = (Factory*) new PatternFactory<Pattern_Colorloop>();
+    patternFactories[2] = (Factory*) new PatternFactory<Pattern_Colorwheel>();
+    patternFactories[3] = (Factory*) new PatternFactory<Pattern_Drift>();
+    patternFactories[4] = (Factory*) new PatternFactory<Pattern_Fire>();
+    patternFactories[5] = (Factory*) new PatternFactory<Pattern_Purple>();
+    patternFactories[6] = (Factory*) new PatternFactory<Pattern_Race>();
+    patternFactories[7] = (Factory*) new PatternFactory<Pattern_Red_Dot>();
+    patternFactories[8] = (Factory*) new PatternFactory<Pattern_Rule110>();
+    patternFactories[9] = (Factory*) new PatternFactory<Pattern_Trains>();
+    patternFactories[10] = (Factory*) new PatternFactory<Pattern_White_Stars>();
+    patternFactories[11] = (Factory*) new PatternFactory<Pattern_Flicker>();
+    patternFactories[12] = (Factory*) new PatternFactory<Pattern_Binary>();
+    patternFactories[13] = (Factory*) new PatternFactory<Pattern_red_255>();
+
+    // TODO: Convert to being usable with factories
+    // patterns[12] = (Pattern*) new Pattern_Drops();
+    // patterns[13] = (Pattern*) new Pattern_Trains(true);
 }
 

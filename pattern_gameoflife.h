@@ -2,7 +2,7 @@
 
 #include "pattern.h"
 
-class Pattern_GameOfLife: Pattern {
+class Pattern_GameOfLife: public Pattern {
   public:
     void loop();
     void init();
