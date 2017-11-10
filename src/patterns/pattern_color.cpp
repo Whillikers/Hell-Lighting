@@ -16,5 +16,4 @@ void Pattern_Color::loop() {
     }
 
     FastLED.show();
-    // delay(1000); //TODO: Change to 10 or remove
 }

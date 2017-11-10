@@ -4,7 +4,7 @@
  *   and handling interface interaction.
  */
 
-#include "init.h"
+#include "src/config/init.h"
 
 // Define led array
 CRGB leds[NUM_LEDS_TOTAL];

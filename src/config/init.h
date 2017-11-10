@@ -6,24 +6,23 @@
 
 #pragma once
 
-#include "hell_lighting.h"
+#include "../../hell_lighting.h"
 
-#include "pattern.h"
-#include "pattern_color.h"
-#include "pattern_colorloop.h"
-#include "pattern_colorwheel.h"
-#include "pattern_drift.h"
-#include "pattern_drops.h"
-#include "pattern_fire.h"
-#include "pattern_purple.h"
-#include "pattern_race.h"
-#include "pattern_red_dot.h"
-#include "pattern_rule110.h"
-#include "pattern_trains.h"
-#include "pattern_white_stars.h"
-#include "pattern_red_255.h"
-#include "pattern_flicker.h"
-#include "pattern_binary.h"
+#include "../patterns/pattern_color.h"
+#include "../patterns/pattern_colorloop.h"
+#include "../patterns/pattern_colorwheel.h"
+#include "../patterns/pattern_drift.h"
+#include "../patterns/pattern_drops.h"
+#include "../patterns/pattern_fire.h"
+#include "../patterns/pattern_purple.h"
+#include "../patterns/pattern_race.h"
+#include "../patterns/pattern_red_dot.h"
+#include "../patterns/pattern_rule110.h"
+#include "../patterns/pattern_trains.h"
+#include "../patterns/pattern_white_stars.h"
+#include "../patterns/pattern_red_255.h"
+#include "../patterns/pattern_flicker.h"
+#include "../patterns/pattern_binary.h"
 
 #define NUM_PATTERNS 14
 

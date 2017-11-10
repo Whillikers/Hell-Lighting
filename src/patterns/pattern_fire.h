@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pattern.h"
+#include "../pattern.h"
 
 class Pattern_Fire: public Pattern {
 public:

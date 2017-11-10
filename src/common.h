@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "topology.h"
-#include "hardware.h"
+#include "config/topology.h"
+#include "config/hardware.h"
 
 #include <FastLED.h>
 

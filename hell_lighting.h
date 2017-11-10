@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "pattern.h"
+#include "src/pattern.h"
 #include <setjmp.h>
 
 // Debug switches //
