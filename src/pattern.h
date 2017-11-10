@@ -2,7 +2,8 @@
  * Pattern.h:
  *  Defines a Pattern abstraction and constants about patterns
  *  as a whole. Patterns may implement the init(), loop(),
- *  cleanup(), and isFinished() methods.
+ *  cleanup(), and isFinished() methods. Also implements pattern factories,
+ *  which are used to give patterns memory when needed and not otherwise.
  */
 
 #pragma once
