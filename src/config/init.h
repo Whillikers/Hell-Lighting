@@ -24,7 +24,7 @@
 #include "../patterns/pattern_flicker.h"
 #include "../patterns/pattern_binary.h"
 
-#define NUM_PATTERNS 14
+#define NUM_PATTERNS 15
 
 // Pattern factory list //
 Factory* patternFactories[NUM_PATTERNS];
@@ -44,9 +44,9 @@ void patternInit() {
     patternFactories[11] = (Factory*) new PatternFactory<Pattern_Flicker>();
     patternFactories[12] = (Factory*) new PatternFactory<Pattern_Binary>();
     patternFactories[13] = (Factory*) new PatternFactory<Pattern_red_255>();
+    patternFactories[14] = (Factory*) new PatternFactory<Pattern_Drops>();
 
-    // TODO: Convert to being usable with factories
-    // patterns[12] = (Pattern*) new Pattern_Drops();
+    // TODO: Convert to new pattern
     // patterns[13] = (Pattern*) new Pattern_Trains(true);
 }
 
