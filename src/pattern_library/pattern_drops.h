@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pattern.h"
+#include "../pattern_internals/pattern.h"
 
 #define NUM_DROPS 5
 #define MIN_DURATION 3000

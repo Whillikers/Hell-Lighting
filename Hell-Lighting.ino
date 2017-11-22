@@ -19,6 +19,7 @@ void setup() {
 
   // Interface setup //
   // Assign pins //
+  // TODO: Move to board abstraction
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
@@ -28,6 +29,7 @@ void setup() {
 
   // LED setup //
   // Add separate LED strips to the array //
+  // TODO: Move to system abstraction
   FastLED.addLeds<APA104, PIN_LED_1, GRB>(leds, 0, NUM_LEDS_1);
   FastLED.addLeds<APA104, PIN_LED_2, GRB>(leds, NUM_LEDS_1, NUM_LEDS_2);
   FastLED.addLeds<APA104, PIN_LED_3, GRB>(leds, NUM_LEDS_1 + NUM_LEDS_2, NUM_LEDS_3);
@@ -87,6 +89,7 @@ void cleanupPattern() {
     free(currentPattern);
 }
 
+// TODO: Move to pattern abstraction (pattern software reset)
 void reset() {
   #ifdef DEBUG
   Serial.println("Resetting system");
@@ -101,6 +104,7 @@ void reset() {
 /*
  * Enable pin-change interrupts on arbitrary pins;
  * taken from http://playground.arduino.cc/Main/PinChangeInterrupt
+ * TODO: Move to board abstraction
  */
 void pciSetup(byte pin) {
   *digitalPinToPCMSK(pin) |= bit (digitalPinToPCMSKbit(pin));  // enable pin
@@ -121,9 +125,11 @@ ISR (PCINT2_vect) { // Pin-interrupt handler for D0 to D7
 }
 
 // The analog pin-interrupt is unused //
+// TODO: Remove??
 ISR (PCINT1_vect) {}
 
 // Button-press behaviors //
+// TODO: Change to pattern-change behavior and make hardware-agnostic; call board triggers
 void nextButton() {
   if (!digitalRead(PIN_BUTTON_NEXT)) return; // We only want to detect a rising edge
   cleanupPattern();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pattern.h"
+#include "../pattern_internals/pattern.h"
 
 typedef struct {
     int pos;

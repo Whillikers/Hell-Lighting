@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "src/pattern.h"
+#include "src/pattern_internals/pattern.h"
 #include <setjmp.h>
 
 // Debug switches //
@@ -18,6 +18,7 @@
 #define PATTERN_DEFAULT color
 
 // Internals //
+// TODO: Clean up global state with abstractions
 int currentPatternIndex;
 Pattern* currentPattern;
 jmp_buf jumpPoint; // Used for escaping functions
