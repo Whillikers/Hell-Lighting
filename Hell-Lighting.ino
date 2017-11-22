@@ -22,9 +22,9 @@ void setup() {
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
+  DDRK = B11111111;
   // Set up interrupts //
-  pciSetup(PIN_BUTTON_NEXT);
-  pciSetup(PIN_BUTTON_PREV);
+  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_NEXT), nextButton, HIGH);
 
   // LED setup //
   // Add separate LED strips to the array //
@@ -129,6 +129,7 @@ void nextButton() {
   cleanupPattern();
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
+  displayPatternNumber(currentPatternIndex);
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
 
@@ -139,3 +140,8 @@ void previousButton() {
   if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
+
+void displayPatternNumber(int patternNumber){
+  PORTK = lowByte(patternNumber);
+}
+
