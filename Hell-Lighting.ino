@@ -22,9 +22,12 @@ void setup() {
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
+  pinMode(PIN_ENCODER_A, INPUT);
+  pinMode(PIN_ENCODER_B, INPUT);
   DDRK = B11111111;
   // Set up interrupts //
-  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_NEXT), nextButton, HIGH);
+  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_NEXT), nextPattern, HIGH);
+  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), patternSwitchEncoder, CHANGE);
 
   // LED setup //
   // Add separate LED strips to the array //
@@ -35,6 +38,7 @@ void setup() {
 
   // Initialize pattern ordering //
   currentPatternIndex = 0;
+  nextPatternIndex = currentPatternIndex;
   patternInit();
 
   // Rest of setup is handled in reset() //
@@ -65,7 +69,12 @@ void runPattern() {
 
   while (!currentPattern->isFinished()) {
     currentPattern->loop();
-
+    delay(1);
+    if (nextPatternIndex != currentPatternIndex){
+      noInterrupts();
+      currentPatternIndex = nextPatternIndex;
+      updatePattern();
+    }
     #ifdef DEBUG
     Serial.println("Pattern finished loop frame");
     #endif
@@ -108,24 +117,8 @@ void pciSetup(byte pin) {
   PCICR  |= bit (digitalPinToPCICRbit(pin)); // enable interrupt for the group
 }
 
-// This interrupt handles the "previous button" behavior on pin D11 //
-ISR (PCINT0_vect) { // Pin-interrupt handler for D8 to D13
-  noInterrupts();
-  previousButton();
-}
-
-// This interrupt handles the "next button" behavior on pin D4 //
-ISR (PCINT2_vect) { // Pin-interrupt handler for D0 to D7
-  noInterrupts();
-  nextButton();
-}
-
-// The analog pin-interrupt is unused //
-ISR (PCINT1_vect) {}
-
 // Button-press behaviors //
-void nextButton() {
-  if (!digitalRead(PIN_BUTTON_NEXT)) return; // We only want to detect a rising edge
+void nextPattern() {
   cleanupPattern();
   currentPatternIndex++;
   if (currentPatternIndex >= NUM_PATTERNS) currentPatternIndex = 0;
@@ -133,13 +126,44 @@ void nextButton() {
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
 
-void previousButton() {
-  if (!digitalRead(PIN_BUTTON_PREV)) return; // We only want to detect a rising edge
+void updatePattern() {
   cleanupPattern();
-  currentPatternIndex--;
-  if (currentPatternIndex < 0) currentPatternIndex = NUM_PATTERNS - 1;
+  displayPatternNumber(currentPatternIndex);
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
+
+
+void patternSwitchEncoder(){
+    #define INTERVAL_CHANGE  100 //ms before another move in the other direction will be considered. 
+    #define INTERVAL_SAME    80 //ms before another move in the same direction will be considered. 
+    static unsigned int previousTime = 0;
+    static bool forward = true; // keep track of last direction
+    bool currentDirection = true;
+    
+    bool A = digitalRead(PIN_ENCODER_A);
+    bool B = digitalRead(PIN_ENCODER_B);
+    if (A == B){
+      currentDirection = true;
+    } else {
+      currentDirection = false;
+    }
+    if (unsigned(millis() - previousTime) > INTERVAL_CHANGE || forward == currentDirection && unsigned(millis() - previousTime) > INTERVAL_SAME){
+      if(currentDirection){
+        // increment current pattern number. 
+        nextPatternIndex++;
+        if (nextPatternIndex >= NUM_PATTERNS) nextPatternIndex = 0;
+      } else {
+        //decriment current pattern number. 
+        nextPatternIndex--;
+        if (nextPatternIndex < 0) nextPatternIndex = NUM_PATTERNS - 1;
+      }
+      displayPatternNumber(nextPatternIndex);
+      
+     previousTime = millis();
+     forward = currentDirection;
+    }
+}
+
 
 void displayPatternNumber(int patternNumber){
   PORTK = lowByte(patternNumber);

@@ -19,5 +19,6 @@
 
 // Internals //
 int currentPatternIndex;
+int nextPatternIndex; // used to keep track of the next pattern to be displayed. Usually equal to currentPattern Index. 
 Pattern* currentPattern;
 jmp_buf jumpPoint; // Used for escaping functions
