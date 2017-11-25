@@ -11,6 +11,7 @@
 
 #include <FastLED.h>
 
+
 /*
  * Globals
  */
@@ -34,3 +35,14 @@ void clearLEDs();
  * the led array
  */
 int transform(int index);
+
+
+/*
+ * Documentation modules
+ */
+
+/**
+ * @defgroup hardware Hardware
+ *
+ * Hardware-level abstractions and hardware/electronics-specific code.
+ */
