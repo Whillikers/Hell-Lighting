@@ -171,7 +171,7 @@ void patternSwitchEncoder(){
       displayPatternNumber(nextPatternIndex);
       
      previousTime = millis();
-     forward = currentDirection;
+     clockwise = currentDirection;
     }
 }
 
