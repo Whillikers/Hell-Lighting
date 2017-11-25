@@ -3,3 +3,6 @@ tags
 *~
 *.swp
 *.swap
+
+# Doxygen-generated documentation
+doxygen

@@ -19,6 +19,7 @@ void setup() {
 
   // Interface setup //
   // Assign pins //
+  // TODO: Move to board abstraction
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
@@ -31,6 +32,7 @@ void setup() {
 
   // LED setup //
   // Add separate LED strips to the array //
+  // TODO: Move to system abstraction
   FastLED.addLeds<APA104, PIN_LED_1, GRB>(leds, 0, NUM_LEDS_1);
   FastLED.addLeds<APA104, PIN_LED_2, GRB>(leds, NUM_LEDS_1, NUM_LEDS_2);
   FastLED.addLeds<APA104, PIN_LED_3, GRB>(leds, NUM_LEDS_1 + NUM_LEDS_2, NUM_LEDS_3);
@@ -96,6 +98,7 @@ void cleanupPattern() {
     free(currentPattern);
 }
 
+// TODO: Move to pattern abstraction (pattern software reset)
 void reset() {
   #ifdef DEBUG
   Serial.println("Resetting system");
@@ -110,6 +113,7 @@ void reset() {
 /*
  * Enable pin-change interrupts on arbitrary pins;
  * taken from http://playground.arduino.cc/Main/PinChangeInterrupt
+ * TODO: Move to board abstraction
  */
 void pciSetup(byte pin) {
   *digitalPinToPCMSK(pin) |= bit (digitalPinToPCMSKbit(pin));  // enable pin
@@ -134,10 +138,17 @@ void updatePattern() {
 
 
 void patternSwitchEncoder(){
+  /*
+   * This is the serial interrupt routine for the pattern switching encoder. It is responcible for deboucning
+   * the encoder and determining the encoder's direction of travel. Note, that in an effort to prevent false
+   * direction changes the debounce interval is shorter for pulses in the same direction than for direciton changes.
+   * In user testing this was found to produce the best results, but it can always be dissabled by setting the two 
+   * intervals to the same value. 
+   */
     #define INTERVAL_CHANGE  100 //ms before another move in the other direction will be considered. 
     #define INTERVAL_SAME    80 //ms before another move in the same direction will be considered. 
     static unsigned int previousTime = 0;
-    static bool forward = true; // keep track of last direction
+    static bool clockwise = true; // keep track of last direction
     bool currentDirection = true;
     
     bool A = digitalRead(PIN_ENCODER_A);
@@ -147,7 +158,7 @@ void patternSwitchEncoder(){
     } else {
       currentDirection = false;
     }
-    if (unsigned(millis() - previousTime) > INTERVAL_CHANGE || forward == currentDirection && unsigned(millis() - previousTime) > INTERVAL_SAME){
+    if (unsigned(millis() - previousTime) > INTERVAL_CHANGE || clockwise == currentDirection && unsigned(millis() - previousTime) > INTERVAL_SAME){
       if(currentDirection){
         // increment current pattern number. 
         nextPatternIndex++;
@@ -166,6 +177,11 @@ void patternSwitchEncoder(){
 
 
 void displayPatternNumber(int patternNumber){
+  /*
+   * This function displays the a value on the pattern number display. 
+   * pre-condition: register "DDRK" which controls the pin mode must be set to output mode for all pins. 
+   * 
+   */
   PORTK = lowByte(patternNumber);
 }
 
