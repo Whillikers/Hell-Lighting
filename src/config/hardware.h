@@ -14,10 +14,10 @@
 #define PIN_BUTTON_RESET 2
 #define PIN_BUTTON_NEXT 18 // TODO: Rewire to an interrupt pin
 #define PIN_BUTTON_PREV 11
-#define PIN_ENCODER_A   14
+#define PIN_ENCODER_A   15
 #define PIN_ENCODER_B   19 
 // Inputs //
-#define PIN_POT A0
+#define PIN_POT A1
 // LED //
 #define PIN_LED_1 3
 #define PIN_LED_2 0

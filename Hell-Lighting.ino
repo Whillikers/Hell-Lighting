@@ -72,6 +72,7 @@ void runPattern() {
   while (!currentPattern->isFinished()) {
     currentPattern->loop();
     delay(1);
+    
     if (nextPatternIndex != currentPatternIndex){
       noInterrupts();
       currentPatternIndex = nextPatternIndex;
