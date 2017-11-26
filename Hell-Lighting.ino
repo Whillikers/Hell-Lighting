@@ -27,7 +27,7 @@ void setup() {
   pinMode(PIN_ENCODER_B, INPUT);
   DDRK = B11111111;
   // Set up interrupts //
-  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_NEXT), nextPattern, HIGH);
+  attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_NEXT), patternResetButton, HIGH);
   attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), patternSwitchEncoder, CHANGE);
 
   // LED setup //
@@ -135,6 +135,17 @@ void updatePattern() {
   cleanupPattern();
   displayPatternNumber(currentPatternIndex);
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
+}
+
+void patternResetButton(){
+  /* 
+   *  This ISR handles the pattern reset button. Normally it just returns the current pattern to it's begining.
+   *  However, it can also function as an "escape button" if the user is stuck in a poorly coded pattern. (by
+   *  turning the encoder to set a new pattern and then using this to trigger a pattern jump).
+   */   
+      noInterrupts();
+      currentPatternIndex = nextPatternIndex;
+      updatePattern();
 }
 
 
