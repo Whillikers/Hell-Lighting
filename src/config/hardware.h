@@ -10,7 +10,7 @@
 #define POT_MAX 1023
 
 // Pins //
-// Interrupts //
+// Pattern-switching //
 #define PIN_BUTTON_RESET 2
 #define PIN_BUTTON_NEXT 18 // TODO: Rewire to an interrupt pin
 #define PIN_BUTTON_PREV 11
