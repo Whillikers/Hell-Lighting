@@ -37,7 +37,7 @@ uint8_t Potentiometer::getAngle8() {
  *
  * @return The angle as an integer value between 0 and UINT16_MAX (65536).
  */
-uint8_t Potentiometer::getAngle16() {
+uint16_t Potentiometer::getAngle16() {
     return getAngleAnalog() << 6;
 }
 

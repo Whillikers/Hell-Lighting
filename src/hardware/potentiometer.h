@@ -1,7 +1,7 @@
 # pragma once
 
 #include "../common.h"
-#include <cstdint>
+#include <stdint.h>
 
 /**
  * @ingroup hardware
