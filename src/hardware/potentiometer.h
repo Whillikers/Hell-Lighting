@@ -1,6 +1,7 @@
 # pragma once
 
 #include "../common.h"
+#include <cstdint>
 
 /**
  * @ingroup hardware
@@ -14,6 +15,8 @@ class Potentiometer {
 public:
     Potentiometer(int analogPin);
 
+    uint8_t getAngle8();
+    uint16_t getAngle16();
     float getAngleProportional();
     float getAngleDegrees();
 

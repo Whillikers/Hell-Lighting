@@ -24,6 +24,24 @@ int Potentiometer::getAngleAnalog() {
 }
 
 /**
+ * Get the potentiometer's reading as an 8-bit value.
+ *
+ * @return The angle as an integer value between 0 and UINT8_MAX (256).
+ */
+uint8_t Potentiometer::getAngle8() {
+    return getAngleAnalog() >> 2;
+}
+
+/**
+ * Get the potentiometer's reading as a 16-bit value.
+ *
+ * @return The angle as an integer value between 0 and UINT16_MAX (65536).
+ */
+uint8_t Potentiometer::getAngle16() {
+    return getAngleAnalog() << 6;
+}
+
+/**
  * Get the potentiometer's angle as a value between 0 and 1.
  *
  * 0 is the potentiometer's most negative value (typically rotated all the
