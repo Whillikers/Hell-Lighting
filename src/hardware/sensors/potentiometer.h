@@ -1,6 +1,6 @@
-# pragma once
+#pragma once
 
-#include "../common.h"
+#include "../../common.h"
 #include <stdint.h>
 
 /**
@@ -32,6 +32,8 @@ protected:
      */
     static const int pot_analog_max = 1023;
 
+    Potentiometer() = default;  // For dummy pot; do not use!
+
 
 private:
     int _pin;
@@ -39,3 +41,16 @@ private:
     int getAngleAnalog();
 };
 
+
+/**
+ * @ingroup hardware
+ *
+ * Dummy potentiometer that always registers zero.
+ */
+class PotentiometerDummy : public Potentiometer {
+public:
+    PotentiometerDummy() = default;
+
+private:
+    int getAngleAnalog();
+};

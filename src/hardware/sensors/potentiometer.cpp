@@ -1,5 +1,6 @@
 #include "potentiometer.h"
 
+/// HARDWARE POT ///
 /**
  * Single-pin potentiometer constructor.
  *
@@ -8,6 +9,7 @@
  * @param analogPin The pin associated to this potentiometer
  */
 Potentiometer::Potentiometer(int analogPin) {
+    pinMode(analogPin, INPUT);
     _pin = analogPin;
 }
 
@@ -65,4 +67,13 @@ float Potentiometer::getAngleProportional() {
  */
 float Potentiometer::getAngleDegrees() {
     return getAngleProportional() * 360.0;
+}
+
+
+/// DUMMY POT ///
+/**
+ * @return 0.
+ */
+int PotentiometerDummy::getAngleAnalog() {
+    return 0;
 }
