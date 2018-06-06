@@ -4,8 +4,8 @@ void Pattern_Flicker::init() {
     clearLEDs();
     FastLED.setBrightness(BRIGHTNESS_MAX / 3);
     for (int i = 0; i < lights_per_side; i++) {
-        countdowns_left[i] = random(0, map(analogRead(PIN_POT), 0, POT_MAX, 10, maxframes_wait));
-        countdowns_right[i] = random(0, map(analogRead(PIN_POT), 0, POT_MAX, 10, maxframes_wait));
+        countdowns_left[i] = random(0, map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 10, maxframes_wait));
+        countdowns_right[i] = random(0, map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 10, maxframes_wait));
         durations_left[i] = 0;
         durations_right[i] = 0;
     }
@@ -22,7 +22,7 @@ void Pattern_Flicker::loop() {
 
             durations_left[i]--;
             if (durations_left[i] <= 0) {
-                countdowns_left[i] = random(0, map(analogRead(PIN_POT), 0, POT_MAX, 10, maxframes_wait));
+                countdowns_left[i] = random(0, map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 10, maxframes_wait));
             }
         } else {
             // We are still counting down
@@ -45,7 +45,7 @@ void Pattern_Flicker::loop() {
 
             durations_right[i]--;
             if (durations_right[i] <= 0) {
-                countdowns_right[i] = random(0, map(analogRead(PIN_POT), 0, POT_MAX, 10, maxframes_wait));
+                countdowns_right[i] = random(0, map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 10, maxframes_wait));
             }
         } else {
             // We are still counting down

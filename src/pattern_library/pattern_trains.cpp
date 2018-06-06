@@ -35,7 +35,7 @@ void Pattern_Trains::loop() {
 
   // Update positions and colors //
   for (int i = 0; i < NUM_TRAINS; i++) {
-    if (i > map(analogRead(PIN_POT), 0, POT_MAX, 0, NUM_TRAINS)) break; // Dial selects how many trains are visible and updates
+    if (i > map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 0, NUM_TRAINS)) break; // Dial selects how many trains are visible and updates
 
     Train* train = trains + i;
     train->pos = (train->pos + train->speed + NUM_LEDS_TOTAL) % NUM_LEDS_TOTAL;

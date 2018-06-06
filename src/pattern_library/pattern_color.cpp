@@ -6,7 +6,8 @@ void Pattern_Color::init() {
 }
 
 void Pattern_Color::loop() {
-    col = CHSV(map(analogRead(PIN_POT), 0, POT_MAX, 0, 255), 255, 255);
+    col = CHSV(map(board.getPotentiometer(0).getAngle16(), 0, MAX_16BIT, 0, 255),
+               255, 255);
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
         leds[transform(i)] = col;
     }

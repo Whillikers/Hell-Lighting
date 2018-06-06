@@ -6,7 +6,7 @@ void Pattern_Fire::init() {
 }
 
 void Pattern_Fire::loop() {
-    uint16_t brightness = max((float) BRIGHTNESS_MAX * (((float) (1024 - analogRead(PIN_POT))) / 1024.0), 5);
+    uint16_t brightness = max((float) BRIGHTNESS_MAX * (1 - board.getPotentiometer(0).getAngleProportional()), 5);
     FastLED.setBrightness(brightness);
     for (int i = 1; i < NUM_LEDS_TOTAL - 1; i++) {
       if (leds[i].r == 0) { // This point has not yet been initialized

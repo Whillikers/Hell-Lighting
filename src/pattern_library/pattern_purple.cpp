@@ -13,5 +13,5 @@ void Pattern_Purple::loop() {
 
     FastLED.show();
     g = (g + 1) % 3;
-    delay(map(analogRead(PIN_POT), 0, POT_MAX, 1, 150));
+    delay(map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 1, 150));
 }

@@ -6,6 +6,9 @@
 
 #include "common.h"
 
+// Define global board //
+Board board = BoardV2();
+
 // Sets all active LEDs to black //
 void clearLEDs() {
   #ifdef DEBUG

@@ -29,7 +29,7 @@ void Pattern_Drift::init() {
 }
 
 void Pattern_Drift::loop() {
-    num = random(map(analogRead(PIN_POT), 0, 255, 0, NUM_LEDS_TOTAL));
+    num = random(map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 0, NUM_LEDS_TOTAL));
     addSub = positiveNegative[random(1)];  // If this round adds or subtracts
 
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {

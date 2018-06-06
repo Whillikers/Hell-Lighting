@@ -14,7 +14,8 @@ void Pattern_White_Stars::init() {
 }
 
 void Pattern_White_Stars::loop() {
-    potValue = analogRead(PIN_POT) * 3;
+    potValue = map(board.getPotentiometer(0).getAngle16(), 0, MAX_16BIT, 59000, 65500);
+    Serial.print(potValue);
 
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
       if (leds[i].r != 0) { //Fade
@@ -31,7 +32,7 @@ void Pattern_White_Stars::loop() {
         continue;
       }
 
-      int r = random16(1024);
+      int r = random16();
       if (r > potValue) leds[i] = CRGB::White;
     }
 

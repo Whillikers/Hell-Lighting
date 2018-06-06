@@ -1,5 +1,5 @@
 /*
- * init.h:
+ * init_patterns.h:
  *  Defines the set of patterns and their order, as well as initializing
  *  patterns.
  */
@@ -42,12 +42,12 @@ void patternInit() {
     patternFactories[7] = (Factory*) new PatternFactory<Pattern_Red_Dot>();
     patternFactories[8] = (Factory*) new PatternFactory<Pattern_Rule110>();
     patternFactories[9] = (Factory*) new PatternFactory<Pattern_Trains>();
-    patternFactories[10] = (Factory*) new PatternFactory<Pattern_White_Stars>();
+    patternFactories[10] = (Factory*) new PatternFactory<Pattern_Colorloop_Sin>();
     patternFactories[11] = (Factory*) new PatternFactory<Pattern_Flicker>();
     patternFactories[12] = (Factory*) new PatternFactory<Pattern_Binary>();
     patternFactories[13] = (Factory*) new PatternFactory<Pattern_red_255>();
     patternFactories[14] = (Factory*) new PatternFactory<Pattern_Drops>();
     patternFactories[15] = (Factory*) new PatternFactory<Pattern_Trains_Accel>();
-    patternFactories[16] = (Factory*) new PatternFactory<Pattern_Colorloop_Sin>();
+    patternFactories[16] = (Factory*) new PatternFactory<Pattern_White_Stars>();
 }
 

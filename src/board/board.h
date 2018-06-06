@@ -1,5 +1,5 @@
 #pragma once
-#include "../common.h"
+#include "../config/hardware.h"
 #include "../hardware/sensors/potentiometer.h"
 #include "../hardware/sensors/button.h"
 #include <assert.h>

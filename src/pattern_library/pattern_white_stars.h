@@ -9,5 +9,5 @@ public:
 private:
     const int scalenumber = 100;
     const int specialFrequency = 20000;
-    int potValue;
+    uint16_t potValue;
 };

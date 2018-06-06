@@ -1,10 +1,11 @@
-/*
+ /*
  * Hell-Lighting.ino:
  *   Internal code for the system's main operation, including running patterns
  *   and handling interface interaction.
  */
 
-#include "src/config/init.h"
+#include "src/config/hardware.h"
+#include "src/config/init_patterns.h"
 
 // Define led array
 CRGB leds[NUM_LEDS_TOTAL];
@@ -142,15 +143,15 @@ void patternSwitchEncoder(){
    * This is the serial interrupt routine for the pattern switching encoder. It is responcible for deboucning
    * the encoder and determining the encoder's direction of travel. Note, that in an effort to prevent false
    * direction changes the debounce interval is shorter for pulses in the same direction than for direciton changes.
-   * In user testing this was found to produce the best results, but it can always be dissabled by setting the two 
-   * intervals to the same value. 
+   * In user testing this was found to produce the best results, but it can always be dissabled by setting the two
+   * intervals to the same value.
    */
-    #define INTERVAL_CHANGE  100 //ms before another move in the other direction will be considered. 
-    #define INTERVAL_SAME    80 //ms before another move in the same direction will be considered. 
+    #define INTERVAL_CHANGE  100 //ms before another move in the other direction will be considered.
+    #define INTERVAL_SAME    80 //ms before another move in the same direction will be considered.
     static unsigned int previousTime = 0;
     static bool clockwise = true; // keep track of last direction
     bool currentDirection = true;
-    
+
     bool A = digitalRead(PIN_ENCODER_A);
     bool B = digitalRead(PIN_ENCODER_B);
     if (A == B){
@@ -160,16 +161,16 @@ void patternSwitchEncoder(){
     }
     if (unsigned(millis() - previousTime) > INTERVAL_CHANGE || clockwise == currentDirection && unsigned(millis() - previousTime) > INTERVAL_SAME){
       if(currentDirection){
-        // increment current pattern number. 
+        // increment current pattern number.
         nextPatternIndex++;
         if (nextPatternIndex >= NUM_PATTERNS) nextPatternIndex = 0;
       } else {
-        //decriment current pattern number. 
+        //decriment current pattern number.
         nextPatternIndex--;
         if (nextPatternIndex < 0) nextPatternIndex = NUM_PATTERNS - 1;
       }
       displayPatternNumber(nextPatternIndex);
-      
+
      previousTime = millis();
      clockwise = currentDirection;
     }
@@ -178,9 +179,9 @@ void patternSwitchEncoder(){
 
 void displayPatternNumber(int patternNumber){
   /*
-   * This function displays the a value on the pattern number display. 
-   * pre-condition: register "DDRK" which controls the pin mode must be set to output mode for all pins. 
-   * 
+   * This function displays the a value on the pattern number display.
+   * pre-condition: register "DDRK" which controls the pin mode must be set to output mode for all pins.
+   *
    */
   PORTK = lowByte(patternNumber);
 }

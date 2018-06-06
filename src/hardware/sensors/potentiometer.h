@@ -1,7 +1,6 @@
 #pragma once
-
-#include "../../common.h"
 #include <stdint.h>
+#include <Arduino.h>
 
 /**
  * @ingroup hardware

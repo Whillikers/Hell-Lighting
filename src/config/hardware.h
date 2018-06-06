@@ -8,6 +8,8 @@
 
 // Sensor constants //
 #define POT_MAX 1023
+#define MAX_8BIT 255
+#define MAX_16BIT 65535
 
 // Pins //
 // Pattern-switching //

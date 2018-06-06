@@ -8,7 +8,9 @@
 
 #include "config/topology.h"
 #include "config/hardware.h"
+#include "board/board_versions/boardV2.h"
 
+#include <Arduino.h>
 #include <FastLED.h>
 
 
@@ -17,6 +19,7 @@
  */
 // Array of all leds taken as one strip, from the inner right corner and going clockwise
 extern CRGB leds[NUM_LEDS_TOTAL];
+extern Board board; // Global board used for all patterns
 
 /*
  * Constants

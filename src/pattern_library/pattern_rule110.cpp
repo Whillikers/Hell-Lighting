@@ -35,5 +35,5 @@ void Pattern_Rule110::loop() {
     }
 
     FastLED.show();
-    delay(analogRead(PIN_POT) + 100);
+    delay(board.getPotentiometer(0).getAngle8() * 4 + 100);
 }

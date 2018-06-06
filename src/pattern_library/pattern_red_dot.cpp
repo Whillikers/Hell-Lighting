@@ -18,6 +18,6 @@ void Pattern_Red_Dot::loop() {
       leds[transform(i + 1)] = CRGB::Red;
       leds[transform(i - 1)] = CRGB::Black;
       FastLED.show();
-      delay(map(analogRead(PIN_POT), 0, POT_MAX, 1, 120));
+      delay(map(board.getPotentiometer(0).getAngle8(), 0, MAX_8BIT, 1, 120));
     }
 }
