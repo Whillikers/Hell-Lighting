@@ -11,7 +11,7 @@ private:
     State state = countdown;
     int raceDist;
     static const int stp = 5;
-    static const int shifts = 70;
+    static const int shifts = 40;
     static const int maxSpeed = 5;
     static const int minSpeed = 2;
     float red, blue;
