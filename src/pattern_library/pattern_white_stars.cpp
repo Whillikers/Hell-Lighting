@@ -29,8 +29,8 @@ void Pattern_White_Stars::loop() {
         continue;
       }
 
-      int r = random(0, 1000);
-      if (r < potValue) leds[i] = CRGB::White;
+      int r = random(0, 10000);
+      if (r < potValue) leds[i] = CRGB(150, 150, 150);
     }
 
     /*
@@ -58,5 +58,5 @@ void Pattern_White_Stars::loop() {
       }
     }
     FastLED.show();
-    delay(25);
+    delay(1);
 }
