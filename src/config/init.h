@@ -15,7 +15,7 @@
 #include "../pattern_library/pattern_drops.h"
 #include "../pattern_library/pattern_fire.h"
 #include "../pattern_library/pattern_purple.h"
-#include "../pattern_library/pattern_race.h"
+#include "../pattern_library/pattern_race_2.h"
 #include "../pattern_library/pattern_red_dot.h"
 #include "../pattern_library/pattern_rule110.h"
 #include "../pattern_library/pattern_trains.h"
@@ -38,7 +38,7 @@ void patternInit() {
     patternFactories[3] = (Factory*) new PatternFactory<Pattern_Drift>();
     patternFactories[4] = (Factory*) new PatternFactory<Pattern_Fire>();
     patternFactories[5] = (Factory*) new PatternFactory<Pattern_Purple>();
-    patternFactories[6] = (Factory*) new PatternFactory<Pattern_Race>();
+    patternFactories[6] = (Factory*) new PatternFactory<Pattern_Race_2>();
     patternFactories[7] = (Factory*) new PatternFactory<Pattern_Red_Dot>();
     patternFactories[8] = (Factory*) new PatternFactory<Pattern_Rule110>();
     patternFactories[9] = (Factory*) new PatternFactory<Pattern_Trains>();
