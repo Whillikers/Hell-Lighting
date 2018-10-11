@@ -9,5 +9,8 @@ public:
 private:
     const int scalenumber = 100;
     const int specialFrequency = 20000;
-    int potValue;
+    static const int minLights = 1; // out of 1000
+    static const int maxLights = 200; // out of 1000
+    static const int fadeRate = 10;
+    float potValue;
 };

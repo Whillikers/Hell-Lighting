@@ -4,10 +4,16 @@
  *   and handling interface interaction.
  */
 
+#define DEBUG_
+
 #include "src/config/init.h"
+
+#include <Encoder.h>
 
 // Define led array
 CRGB leds[NUM_LEDS_TOTAL];
+
+Encoder patternSelector(PIN_ENCODER_B, PIN_ENCODER_A);
 
 // Automatic functions //
 void setup() {
@@ -23,12 +29,9 @@ void setup() {
   pinMode(PIN_BUTTON_RESET, INPUT);
   pinMode(PIN_BUTTON_NEXT, INPUT);
   pinMode(PIN_BUTTON_PREV, INPUT);
-  pinMode(PIN_ENCODER_A, INPUT);
-  pinMode(PIN_ENCODER_B, INPUT);
   DDRK = B11111111;
   // Set up interrupts //
   attachInterrupt(digitalPinToInterrupt(PIN_BUTTON_NEXT), nextPattern, HIGH);
-  attachInterrupt(digitalPinToInterrupt(PIN_ENCODER_B), patternSwitchEncoder, CHANGE);
 
   // LED setup //
   // Add separate LED strips to the array //
@@ -72,13 +75,24 @@ void runPattern() {
   while (!currentPattern->isFinished()) {
     currentPattern->loop();
     delay(1);
+
+    int nextPatternIndex = (patternSelector.read() / 4) % NUM_PATTERNS;
+    // % in C will return negatives with abs val less than divisor
+    if (nextPatternIndex < 0) {
+      nextPatternIndex += NUM_PATTERNS;
+    }
+
+    #ifdef DEBUG
+    Serial.println(nextPatternIndex);
+    #endif
+    
     if (nextPatternIndex != currentPatternIndex){
-      noInterrupts();
+      //noInterrupts();
       currentPatternIndex = nextPatternIndex;
       updatePattern();
     }
     #ifdef DEBUG
-    Serial.println("Pattern finished loop frame");
+    //Serial.println("Pattern finished loop frame");
     #endif
   }
 
@@ -136,46 +150,6 @@ void updatePattern() {
   longjmp(jumpPoint, 1); // End the current pattern and load a new one
 }
 
-
-void patternSwitchEncoder(){
-  /*
-   * This is the serial interrupt routine for the pattern switching encoder. It is responcible for deboucning
-   * the encoder and determining the encoder's direction of travel. Note, that in an effort to prevent false
-   * direction changes the debounce interval is shorter for pulses in the same direction than for direciton changes.
-   * In user testing this was found to produce the best results, but it can always be dissabled by setting the two 
-   * intervals to the same value. 
-   */
-    #define INTERVAL_CHANGE  100 //ms before another move in the other direction will be considered. 
-    #define INTERVAL_SAME    80 //ms before another move in the same direction will be considered. 
-    static unsigned int previousTime = 0;
-    static bool clockwise = true; // keep track of last direction
-    bool currentDirection = true;
-    
-    bool A = digitalRead(PIN_ENCODER_A);
-    bool B = digitalRead(PIN_ENCODER_B);
-    if (A == B){
-      currentDirection = true;
-    } else {
-      currentDirection = false;
-    }
-    if (unsigned(millis() - previousTime) > INTERVAL_CHANGE || clockwise == currentDirection && unsigned(millis() - previousTime) > INTERVAL_SAME){
-      if(currentDirection){
-        // increment current pattern number. 
-        nextPatternIndex++;
-        if (nextPatternIndex >= NUM_PATTERNS) nextPatternIndex = 0;
-      } else {
-        //decriment current pattern number. 
-        nextPatternIndex--;
-        if (nextPatternIndex < 0) nextPatternIndex = NUM_PATTERNS - 1;
-      }
-      displayPatternNumber(nextPatternIndex);
-      
-     previousTime = millis();
-     clockwise = currentDirection;
-    }
-}
-
-
 void displayPatternNumber(int patternNumber){
   /*
    * This function displays the a value on the pattern number display. 
@@ -184,4 +158,3 @@ void displayPatternNumber(int patternNumber){
    */
   PORTK = lowByte(patternNumber);
 }
-
