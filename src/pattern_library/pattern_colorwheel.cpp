@@ -11,7 +11,7 @@ void Pattern_Colorwheel::loop() {
       leds[transform(i)] = CHSV(map(i + pos, 0, NUM_LEDS_TOTAL, 0, 255), 255, 255);
     }
 
-    pos += map(analogRead(PIN_POT), 0, POT_MAX, 0, 50);
+    pos += map(analogRead(PIN_POT), POT_MAX, 0, 0, 250);
     if (pos >= NUM_LEDS_TOTAL) pos -= NUM_LEDS_TOTAL;
     FastLED.show();
     delay(10);
