@@ -25,8 +25,9 @@
 #include "../pattern_library/pattern_binary.h"
 #include "../pattern_library/pattern_trains_accel.h"
 #include "../pattern_library/pattern_colorloop_sin.h"
+#include "../pattern_library/pattern_morse.h"
 
-#define NUM_PATTERNS 17
+#define NUM_PATTERNS 18
 
 // Pattern factory list //
 Factory* patternFactories[NUM_PATTERNS];
@@ -49,5 +50,6 @@ void patternInit() {
     patternFactories[14] = (Factory*) new PatternFactory<Pattern_Drops>();
     patternFactories[15] = (Factory*) new PatternFactory<Pattern_Trains_Accel>();
     patternFactories[16] = (Factory*) new PatternFactory<Pattern_Colorloop_Sin>();
+    patternFactories[17] = (Factory*) new PatternFactory<Pattern_Morse>();
 }
 
