@@ -46,15 +46,10 @@ void Pattern_White_Stars::loop() {
     */
 
     // periodically have a large increase or decrease in the number of lights.
-    if (random(specialFrequency) == 0){
-      if (random(1) == 1){
-        for(int i = 0; i < random(NUM_LEDS_TOTAL); i++){
-          leds[random(NUM_LEDS_TOTAL)] = CRGB::Black;
-        }
-      } else {
-        for(int i = 0; i < random(NUM_LEDS_TOTAL); i++){
-          leds[random(NUM_LEDS_TOTAL)] = CRGB::Black;
-        }
+    if (random(0, specialFrequency) == 0){
+      for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
+          int v = random(127, 256);
+          leds[transform(i)] = CRGB(v, v, v);
       }
     }
     FastLED.show();

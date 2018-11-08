@@ -9,55 +9,61 @@ public:
 private:
     const int dashLength = 3;
     const int dotLength = 1;
-    const int gap = 1;
+    const int gap = 2;
     const int space = 3;
+    const int minRepeatGap = 50;
 
     int msgStart = 0;
     int msgLength = 0;
     int pixelLength = 0;
+    int lightIndex;
 
-    char* msgAscii = "HELLO";
-    char* msgMorse = "";
-};
+    int repeats;
+    int repeatGap = minRepeatGap;
 
-char* morseLetters[] = {
-    ".-",
-    "-...",
-    "-.-.",
-    "-..",
-    ".",
-    "..-.",
-    "--.",
-    "....",
-    "..",
-    ".---",
-    "-.-",
-    ".-..",
-    "--",
-    "-.",
-    "---",
-    ".--.",
-    "--.-",
-    ".-.",
-    "...",
-    "-",
-    "..-",
-    "...-",
-    ".--",
-    "-..-",
-    "-.--",
-    "--.."
-};
+    String msgAscii = "GDBG";
+    String msgMorse = "";
+    String msgPixels = "";
 
-char* morseNumbers[] = {
-    "-----",
-    ".----",
-    "..---",
-    "...--",
-    "....-",
-    ".....",
-    "-....",
-    "--...",
-    "---..",
-    "----.",
+    String morseLetters[26] = {
+        ".-",
+        "-...",
+        "-.-.",
+        "-..",
+        ".",
+        "..-.",
+        "--.",
+        "....",
+        "..",
+        ".---",
+        "-.-",
+        ".-..",
+        "--",
+        "-.",
+        "---",
+        ".--.",
+        "--.-",
+        ".-.",
+        "...",
+        "-",
+        "..-",
+        "...-",
+        ".--",
+        "-..-",
+        "-.--",
+        "--.."
+    };
+
+    String morseNumbers[10] = {
+        "-----",
+        ".----",
+        "..---",
+        "...--",
+        "....-",
+        ".....",
+        "-....",
+        "--...",
+        "---..",
+        "----.",
+    };
 };
