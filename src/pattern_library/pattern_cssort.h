@@ -17,5 +17,7 @@ private:
     bool swapOccurred;
 
     void shuffleArr();
+    void updateLEDs(int idx);
+
     int* arr;
 };

@@ -1,7 +1,5 @@
 #include "pattern_cssort.h"
 
-#define SORT_STEP_DELAY 10
-
 #define SORT_ARR_SIZE NUM_LEDS_TOTAL
 // TODO actually only want NUM_LEDS_TOTAL/255 ?
 // like each element spans multiple LEDs
@@ -23,6 +21,12 @@ void Pattern_CSSorting::init() {
     state = up;
     i = 0;
     swapOccurred = false;
+
+    for (int k = 0; k < NUM_LEDS_TOTAL; k++) {
+        leds[transform(k)] = CHSV(map(arr[k], 0, NUM_LEDS_TOTAL, 0, 255), 255, 255);
+    }
+    FastLED.show();
+    delay(1000); // wait a second before we start
 }
 
 void Pattern_CSSorting::cleanup() {
@@ -34,50 +38,51 @@ bool Pattern_CSSorting::isFinished() {
 }
 
 void Pattern_CSSorting::loop() {
-    for (int k = 0; k < NUM_LEDS_TOTAL; k++) {
-        leds[transform(k)] = CHSV(map(arr[k], 0, NUM_LEDS_TOTAL, 0, 255), 255, 255);
-    }
-    FastLED.show();
-
-    int left = arr[i];
-    int right = arr[i + 1];
-
-    if (left > right) {
-        swapOccurred = true;
-        arr[i] = right;
-        arr[i + 1] = left;
-    }
-
+    // find the next potential swap (or hit an end of the array)
     switch (state) {
     case up:
-        i++;
+        while (i < SORT_ARR_SIZE - 2 && arr[i] <= arr[i + 1]) {
+            i++;
+        }
         break;
     case down:
-        i--;
+        while (i > 0 && arr[i] <= arr[i + 1]) {
+            i--;
+        }
         break;
     default:
         break;
     }
 
-    if (i == NUM_LEDS_TOTAL - 1) {
-        i = NUM_LEDS_TOTAL - 2;
+    // make swap if applicable
+    if (arr[i] > arr[i + 1]) {
+        int right = arr[i + 1];
+        arr[i + 1] = arr[i];
+        arr[i] = right;
+        swapOccurred = true;
+
+        updateLEDs(i);
+        updateLEDs(i + 1);
+        FastLED.show();
+    }
+
+    // check for state change (when hitting end)
+    if (i == 0 || i == NUM_LEDS_TOTAL - 2) {
         if (swapOccurred) {
             swapOccurred = false;
-            state = down;
-        } else {
-            state = finished;
-        }
-    } else if (i < 0) {
-        i = 0;
-        if (swapOccurred) {
-            state = up;
-            swapOccurred = false;
+            state = (state == up) ? down : up;
         } else {
             state = finished;
         }
     }
 
+#ifdef SORT_STEP_DELAY
     delay(SORT_STEP_DELAY);
+#endif
+}
+
+void Pattern_CSSorting::updateLEDs(int idx) {
+    leds[transform(i)] = CHSV(map(arr[idx], 0, SORT_ARR_SIZE, 0, 255), 255, 255);
 }
 
 void Pattern_CSSorting::shuffleArr() {
