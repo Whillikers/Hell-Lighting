@@ -1,6 +1,8 @@
 #include "pattern_cssort.h"
 
-#define SORT_ARR_SIZE NUM_LEDS_TOTAL
+#define WIDTH 5
+#define SORT_ARR_SIZE (NUM_LEDS_TOTAL/WIDTH)
+
 // TODO actually only want NUM_LEDS_TOTAL/255 ?
 // like each element spans multiple LEDs
 // can even blink outer LEDs in each bit to indicate accesses/swaps
@@ -24,8 +26,8 @@ void Pattern_CSSorting::init() {
     highIdx = SORT_ARR_SIZE - 2;
     swapOccurred = false;
 
-    for (int k = 0; k < NUM_LEDS_TOTAL; k++) {
-        leds[transform(k)] = CHSV(map(arr[k], 0, NUM_LEDS_TOTAL, 0, 255), 255, 255);
+    for (int i = 0; i < SORT_ARR_SIZE; i++) {
+        updateLEDs(i);
     }
     FastLED.show();
     delay(1000); // wait a second before we start
@@ -88,14 +90,13 @@ void Pattern_CSSorting::loop() {
             state = finished;
         }
     }
-
-#ifdef SORT_STEP_DELAY
-    delay(SORT_STEP_DELAY);
-#endif
 }
 
 void Pattern_CSSorting::updateLEDs(int i) {
-    leds[transform(i)] = CHSV(map(arr[i], 0, SORT_ARR_SIZE, 0, 255), 255, 255);
+    CHSV color(map(arr[i], 0, SORT_ARR_SIZE, 0, 255), 255, 255);
+
+    for (int k = WIDTH * i; k < WIDTH * (i + 1); k++)
+        leds[transform(k)] = color;
 }
 
 void Pattern_CSSorting::shuffleArr() {
