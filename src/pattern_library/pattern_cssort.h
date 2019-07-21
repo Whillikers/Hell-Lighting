@@ -13,8 +13,13 @@ public:
 private:
     enum State { up, down, finished };
     State state;
-    int i;
+
+    int lowIdx;
+    int highIdx;
+    int current;
+
     bool swapOccurred;
+    int lastSwap;
 
     void shuffleArr();
     void updateLEDs(int idx);

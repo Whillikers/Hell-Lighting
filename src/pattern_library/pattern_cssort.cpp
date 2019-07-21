@@ -19,7 +19,9 @@ void Pattern_CSSorting::init() {
     shuffleArr();
 
     state = up;
-    i = 0;
+    current = 0;
+    lowIdx = 0;
+    highIdx = SORT_ARR_SIZE - 2;
     swapOccurred = false;
 
     for (int k = 0; k < NUM_LEDS_TOTAL; k++) {
@@ -41,13 +43,13 @@ void Pattern_CSSorting::loop() {
     // find the next potential swap (or hit an end of the array)
     switch (state) {
     case up:
-        while (i < SORT_ARR_SIZE - 2 && arr[i] <= arr[i + 1]) {
-            i++;
+        while (current < highIdx && arr[current] <= arr[current + 1]) {
+            current++;
         }
         break;
     case down:
-        while (i > 0 && arr[i] <= arr[i + 1]) {
-            i--;
+        while (current > lowIdx && arr[current] <= arr[current + 1]) {
+            current--;
         }
         break;
     default:
@@ -55,23 +57,34 @@ void Pattern_CSSorting::loop() {
     }
 
     // make swap if applicable
-    if (arr[i] > arr[i + 1]) {
-        int right = arr[i + 1];
-        arr[i + 1] = arr[i];
-        arr[i] = right;
-        swapOccurred = true;
+    if (arr[current] > arr[current + 1]) {
+        int right = arr[current + 1];
+        arr[current + 1] = arr[current];
+        arr[current] = right;
 
-        updateLEDs(i);
-        updateLEDs(i + 1);
+        swapOccurred = true;
+        lastSwap = current;
+
+        updateLEDs(current);
+        updateLEDs(current + 1);
         FastLED.show();
     }
 
     // check for state change (when hitting end)
-    if (i == 0 || i == NUM_LEDS_TOTAL - 2) {
+    if (current == lowIdx || current == highIdx) {
         if (swapOccurred) {
             swapOccurred = false;
-            state = (state == up) ? down : up;
+            current = lastSwap;
+            if (state == up) {
+                state = down;
+                highIdx = lastSwap;
+            } else {
+                state = up;
+                current = lastSwap;
+                lowIdx = lastSwap;
+            }
         } else {
+            delay(1000); // give time to enjoy sorted LEDs
             state = finished;
         }
     }
@@ -81,8 +94,8 @@ void Pattern_CSSorting::loop() {
 #endif
 }
 
-void Pattern_CSSorting::updateLEDs(int idx) {
-    leds[transform(i)] = CHSV(map(arr[idx], 0, SORT_ARR_SIZE, 0, 255), 255, 255);
+void Pattern_CSSorting::updateLEDs(int i) {
+    leds[transform(i)] = CHSV(map(arr[i], 0, SORT_ARR_SIZE, 0, 255), 255, 255);
 }
 
 void Pattern_CSSorting::shuffleArr() {
