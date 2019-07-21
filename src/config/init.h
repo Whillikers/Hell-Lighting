@@ -27,7 +27,7 @@
 #include "../pattern_library/pattern_colorloop_sin.h"
 #include "../pattern_library/pattern_morse.h"
 #include "../pattern_library/pattern_marbling.h"
-#include "../pattern_library/pattern_cssort.h"
+#include "../pattern_library/pattern_sort_cs.h"
 
 #define NUM_PATTERNS 20
 
