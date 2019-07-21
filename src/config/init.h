@@ -27,8 +27,9 @@
 #include "../pattern_library/pattern_colorloop_sin.h"
 #include "../pattern_library/pattern_morse.h"
 #include "../pattern_library/pattern_marbling.h"
+#include "../pattern_library/pattern_cssort.h"
 
-#define NUM_PATTERNS 19
+#define NUM_PATTERNS 20
 
 // Pattern factory list //
 Factory* patternFactories[NUM_PATTERNS];
@@ -53,5 +54,5 @@ void patternInit() {
     patternFactories[16] = (Factory*) new PatternFactory<Pattern_Colorloop_Sin>();
     patternFactories[17] = (Factory*) new PatternFactory<Pattern_Morse>();
     patternFactories[18] = (Factory*) new PatternFactory<Pattern_Marbling>();
+    patternFactories[19] = (Factory*) new PatternFactory<Pattern_CSSorting>();
 }
-
