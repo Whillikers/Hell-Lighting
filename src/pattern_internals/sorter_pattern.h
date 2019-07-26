@@ -12,6 +12,8 @@
 
 #include "pattern.h"
 
+#define SORT_ARR_SIZE (NUM_LEDS_TOTAL/WIDTH)
+
 /**
  * A superclass and framework for user-created patterns that visualize
  * sorting an array as sorting a color wheel.
@@ -31,9 +33,9 @@ protected:
     virtual void sorterLoop();
     virtual void sorterCleanup();
 
-    virtual int WIDTH = 1;
-    virtual int START_DELAY = 1000;
-    virtual int END_DELAY = 5000;
+    int WIDTH = 1;
+    int START_DELAY = 1000;
+    int END_DELAY = 5000;
 
     // TODO customize whether/how swaps/accesses get highlighted by overriding
 
@@ -46,11 +48,12 @@ protected:
 private:
     int* arr;
 
-    enum PatternState { PRE_SORT, SORT, POST_SORT, DONE };
+    enum PatternState { PRE_SORT, SORT, POST_SORT, FINISHED };
     PatternState state;
     unsigned long lastEvent;
 
-    void updateLED(int i);
+    void updateLEDs(int i);
     void blinkOff();
     void blinkOn();
+    bool blinkState;
 };
