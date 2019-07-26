@@ -1,18 +1,17 @@
 #pragma once
 
-#include "../pattern_internals/pattern.h"
+#include "../pattern_internals/sorter_pattern.h"
 
-class Pattern_CSSorting: public Pattern {
-public:
-    void init();
-    void cleanup();
-    bool isFinished();
+class Pattern_CSSorting: public SorterPattern {
+protected:
+    void sorterInit();
+    void sorterLoop();
 
-    void loop();
+    int WIDTH = 5;
 
 private:
-    enum State { up, down, finished };
-    State state;
+    enum SorterState { UP, DOWN };
+    SorterState state;
 
     int lowIdx;
     int highIdx;
@@ -20,9 +19,4 @@ private:
 
     bool swapOccurred;
     int lastSwap;
-
-    void shuffleArr();
-    void updateLEDs(int idx);
-
-    int* arr;
 };
