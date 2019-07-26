@@ -1,4 +1,4 @@
-#include "pattern_cssort.h"
+#include "pattern_sort_cs.h"
 
 #define WIDTH 5
 #define SORT_ARR_SIZE (NUM_LEDS_TOTAL/WIDTH)
