@@ -29,8 +29,11 @@ public:
 protected:
     virtual void sorterInit();
     virtual void sorterLoop();
+    virtual void sorterCleanup();
 
     virtual int WIDTH = 1;
+    virtual int START_DELAY = 1000;
+    virtual int END_DELAY = 5000;
 
     // TODO customize whether/how swaps/accesses get highlighted by overriding
 
@@ -45,6 +48,9 @@ private:
 
     enum PatternState { PRE_SORT, SORT, POST_SORT, DONE };
     PatternState state;
+    unsigned long lastEvent;
 
-    void updateLEDs(int i);
+    void updateLED(int i);
+    void blinkOff();
+    void blinkOn();
 };
