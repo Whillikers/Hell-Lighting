@@ -4,9 +4,9 @@ void SorterPattern::init() {
     clearLEDs();
     FastLED.setBrightness(BRIGHTNESS_MAX);
 
-    // initialize arr to [0 ... SORT_ARR_SIZE - 1]
-    arr = new int[SORT_ARR_SIZE];
-    for (int i = 0; i < SORT_ARR_SIZE; i++) {
+    // initialize arr to [0 ... getArrSize() - 1]
+    arr = new int[getArrSize()];
+    for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
     }
     srand(millis());
@@ -24,7 +24,7 @@ void SorterPattern::loop() {
     unsigned long t = millis() - lastEvent;
     switch(state) {
     case PRE_SORT:
-        if (t > START_DELAY) {
+        if (t > getStartDelay()) {
             state = SORT;
         }
         break;
@@ -33,7 +33,7 @@ void SorterPattern::loop() {
         FastLED.show();
         break;
     case POST_SORT:
-        if (t > END_DELAY) {
+        if (t > getEndDelay()) {
             state = FINISHED;
         } else if (blinkState != ((t / 1000) & 1 == 0)) {
             // true every other second
@@ -62,6 +62,19 @@ void SorterPattern::sorterInit() {}
 void SorterPattern::sorterLoop() {}
 void SorterPattern::sorterCleanup() {}
 
+unsigned int SorterPattern::getElementWidth() {
+    return 1;
+}
+unsigned int SorterPattern::getArrSize() {
+    return NUM_LEDS_TOTAL / getElementWidth();
+}
+unsigned int SorterPattern::getStartDelay() {
+    return 1000;
+}
+unsigned int SorterPattern::getEndDelay() {
+    return 5000;
+}
+
 void SorterPattern::signalDoneSorting() {
     state = POST_SORT;
     blinkState = false;
@@ -83,16 +96,16 @@ void SorterPattern::arrSwap(int i, int j) {
     updateLEDs(j);
 }
 void SorterPattern::arrShuffle() {
-    for (int i = 0; i < SORT_ARR_SIZE; i++) {
-        int j = i + rand() % (SORT_ARR_SIZE - i);
+    for (int i = 0; i < getArrSize(); i++) {
+        int j = i + rand() % (getArrSize() - i);
         arrSwap(i, j);
     }
 }
 
 void SorterPattern::updateLEDs(int i) {
-    CHSV color(map(arr[i], 0, SORT_ARR_SIZE, 0, 255), 255, 255);
+    CHSV color(map(arr[i], 0, getArrSize(), 0, 255), 255, 255);
 
-    for (int k = WIDTH * i; k < WIDTH * (i + 1); k++) {
+    for (int k = getElementWidth() * i; k < getElementWidth() * (i + 1); k++) {
         leds[transform(k)] = color;
     }
 }
@@ -103,7 +116,7 @@ void SorterPattern::blinkOff() {
     }
 }
 void SorterPattern::blinkOn() {
-    for (int i = 0; i < SORT_ARR_SIZE; i++) {
+    for (int i = 0; i < getArrSize(); i++) {
         updateLEDs(i);
     }
 }

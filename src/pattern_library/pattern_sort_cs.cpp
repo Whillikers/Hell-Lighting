@@ -1,10 +1,14 @@
 #include "pattern_sort_cs.h"
 
+unsigned int Pattern_CSSorting::getElementWidth() {
+    return 5;
+}
+
 void Pattern_CSSorting::sorterInit() {
     state = UP;
     current = 0;
     lowIdx = 0;
-    highIdx = SORT_ARR_SIZE - 2;
+    highIdx = getArrSize() - 2;
     swapOccurred = false;
 }
 

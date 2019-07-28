@@ -4,10 +4,10 @@
 
 class Pattern_CSSorting: public SorterPattern {
 protected:
-    void sorterInit();
-    void sorterLoop();
+    void sorterInit() override;
+    void sorterLoop() override;
 
-    int WIDTH = 5;
+    unsigned int getElementWidth() override;
 
 private:
     enum SorterState { UP, DOWN };
