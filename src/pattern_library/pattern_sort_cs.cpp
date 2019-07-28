@@ -13,28 +13,23 @@ void Pattern_CSSorting::sorterInit() {
 }
 
 void Pattern_CSSorting::sorterLoop() {
-    // find the next potential swap (or hit an end of the array)
-    switch (state) {
-    case UP:
-        while (current < highIdx && arrGet(current) <= arrGet(current + 1)) {
-            current++;
-        }
-        break;
-    case DOWN:
-        while (current > lowIdx && arrGet(current) <= arrGet(current + 1)) {
-            current--;
-        }
-        break;
-    default:
-        break;
-    }
-
     // make swap if applicable
     if (arrGet(current) > arrGet(current + 1)) {
         arrSwap(current, current + 1);
 
         swapOccurred = true;
         lastSwap = current;
+    }
+
+    switch (state) {
+    case UP:
+        current++;
+        break;
+    case DOWN:
+        current--;
+        break;
+    default:
+        break;
     }
 
     // check for state change (when hitting end)
@@ -47,7 +42,6 @@ void Pattern_CSSorting::sorterLoop() {
                 highIdx = lastSwap;
             } else {
                 state = UP;
-                current = lastSwap;
                 lowIdx = lastSwap;
             }
         } else {
