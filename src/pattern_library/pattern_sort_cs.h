@@ -7,8 +7,6 @@ protected:
     void sorterInit() override;
     void sorterLoop() override;
 
-    unsigned int getElementWidth() override;
-
 private:
     enum SorterState { UP, DOWN };
     SorterState state;

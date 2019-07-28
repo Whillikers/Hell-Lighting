@@ -39,13 +39,13 @@ protected:
     // TODO customize whether/how swaps/accesses get highlighted by overriding
 
     void signalDoneSorting();
-    uint16_t arrGet(int i);
-    void arrSet(int i, uint16_t val);
+    uint8_t arrGet(int i);
+    void arrSet(int i, uint8_t val);
     void arrSwap(int i, int j);
     void arrShuffle();
 
 private:
-    uint16_t* arr;
+    uint8_t* arr;
 
     enum PatternState { PRE_SORT, SORT, POST_SORT, FINISHED };
     PatternState state;

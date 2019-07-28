@@ -1,7 +1,7 @@
 #include "sorter_pattern.h"
 
 unsigned int SorterPattern::getElementWidth() {
-    return 1;
+    return 5;
 }
 unsigned int SorterPattern::getArrSize() {
     return NUM_LEDS_TOTAL / getElementWidth();
@@ -18,7 +18,7 @@ void SorterPattern::init() {
     FastLED.setBrightness(BRIGHTNESS_MAX);
 
     // initialize arr to [0 ... getArrSize() - 1]
-    arr = new uint16_t[getArrSize()];
+    arr = new uint8_t[getArrSize()];
     for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
     }
@@ -82,16 +82,16 @@ void SorterPattern::signalDoneSorting() {
     lastEvent = millis();
 }
 
-uint16_t SorterPattern::arrGet(int i) {
+uint8_t SorterPattern::arrGet(int i) {
     return arr[i];
 }
-void SorterPattern::arrSet(int i, uint16_t val) {
+void SorterPattern::arrSet(int i, uint8_t val) {
     arr[i] = val;
     updateLEDs(i);
 }
 void SorterPattern::arrSwap(int i, int j) {
     if (i != j) {
-        uint16_t tmp = arr[i];
+        uint8_t tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
         updateLEDs(i);
