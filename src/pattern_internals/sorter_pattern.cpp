@@ -1,5 +1,18 @@
 #include "sorter_pattern.h"
 
+unsigned int SorterPattern::getElementWidth() {
+    return 1;
+}
+unsigned int SorterPattern::getArrSize() {
+    return NUM_LEDS_TOTAL / getElementWidth();
+}
+unsigned int SorterPattern::getStartDelay() {
+    return 2000;
+}
+unsigned int SorterPattern::getEndDelay() {
+    return 7000;
+}
+
 void SorterPattern::init() {
     clearLEDs();
     FastLED.setBrightness(BRIGHTNESS_MAX);
@@ -24,7 +37,7 @@ void SorterPattern::loop() {
     unsigned long t = millis() - lastEvent;
     switch(state) {
     case PRE_SORT:
-        if (t > getStartDelay()) {
+        if (t >= getStartDelay()) {
             state = SORT;
         }
         break;
@@ -33,16 +46,17 @@ void SorterPattern::loop() {
         FastLED.show();
         break;
     case POST_SORT:
-        if (t > getEndDelay()) {
+        if (t >= getEndDelay()) {
             state = FINISHED;
-        } else if (blinkState != ((t / 1000) & 1 == 0)) {
-            // true every other second
-            blinkState = !blinkState;
-
-            if (blinkState) {
+        } else if ( (t / 1000) & 1 ) {
+            if (!blinkState) {
                 blinkOn();
-            } else {
+                blinkState = true;
+            }
+        } else {
+            if (blinkState) {
                 blinkOff();
+                blinkState = false;
             }
         }
         break;
@@ -61,19 +75,6 @@ bool SorterPattern::isFinished() {
 void SorterPattern::sorterInit() {}
 void SorterPattern::sorterLoop() {}
 void SorterPattern::sorterCleanup() {}
-
-unsigned int SorterPattern::getElementWidth() {
-    return 1;
-}
-unsigned int SorterPattern::getArrSize() {
-    return NUM_LEDS_TOTAL / getElementWidth();
-}
-unsigned int SorterPattern::getStartDelay() {
-    return 1000;
-}
-unsigned int SorterPattern::getEndDelay() {
-    return 5000;
-}
 
 void SorterPattern::signalDoneSorting() {
     state = POST_SORT;
@@ -114,9 +115,11 @@ void SorterPattern::blinkOff() {
     for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
         leds[i] = CRGB::Black;
     }
+    FastLED.show();
 }
 void SorterPattern::blinkOn() {
     for (int i = 0; i < getArrSize(); i++) {
         updateLEDs(i);
     }
+    FastLED.show();
 }
