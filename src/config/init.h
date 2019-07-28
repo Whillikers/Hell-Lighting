@@ -28,8 +28,9 @@
 #include "../pattern_library/pattern_morse.h"
 #include "../pattern_library/pattern_marbling.h"
 #include "../pattern_library/pattern_sort_cs.h"
+#include "../pattern_library/pattern_sort_radix_lsd.h"
 
-#define NUM_PATTERNS 20
+#define NUM_PATTERNS 21
 
 // Pattern factory list //
 Factory* patternFactories[NUM_PATTERNS];
@@ -55,4 +56,5 @@ void patternInit() {
     patternFactories[17] = (Factory*) new PatternFactory<Pattern_Morse>();
     patternFactories[18] = (Factory*) new PatternFactory<Pattern_Marbling>();
     patternFactories[19] = (Factory*) new PatternFactory<Pattern_CSSorting>();
+    patternFactories[20] = (Factory*) new PatternFactory<Pattern_SortingRadixLSD>();
 }
