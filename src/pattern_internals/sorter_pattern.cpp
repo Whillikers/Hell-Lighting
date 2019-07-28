@@ -90,11 +90,13 @@ void SorterPattern::arrSet(int i, int val) {
     updateLEDs(i);
 }
 void SorterPattern::arrSwap(int i, int j) {
-    int tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
-    updateLEDs(i);
-    updateLEDs(j);
+    if (i != j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+        updateLEDs(i);
+        updateLEDs(j);
+    }
 }
 void SorterPattern::arrShuffle() {
     for (int i = 0; i < getArrSize(); i++) {
