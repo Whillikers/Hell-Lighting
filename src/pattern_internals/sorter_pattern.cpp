@@ -18,7 +18,7 @@ void SorterPattern::init() {
     FastLED.setBrightness(BRIGHTNESS_MAX);
 
     // initialize arr to [0 ... getArrSize() - 1]
-    arr = new int[getArrSize()];
+    arr = new uint16_t[getArrSize()];
     for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
     }
@@ -82,16 +82,16 @@ void SorterPattern::signalDoneSorting() {
     lastEvent = millis();
 }
 
-int SorterPattern::arrGet(int i) {
+uint16_t SorterPattern::arrGet(int i) {
     return arr[i];
 }
-void SorterPattern::arrSet(int i, int val) {
+void SorterPattern::arrSet(int i, uint16_t val) {
     arr[i] = val;
     updateLEDs(i);
 }
 void SorterPattern::arrSwap(int i, int j) {
     if (i != j) {
-        int tmp = arr[i];
+        uint16_t tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
         updateLEDs(i);

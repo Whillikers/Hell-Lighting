@@ -1,14 +1,18 @@
 #include "pattern_sort_radix_lsd.h"
 
+unsigned int Pattern_SortingRadixLSD::getElementWidth() {
+    return RADIX_LSD_ELEMENT_WIDTH; // minimum width that allows usage of uint8_t
+}
+
 void Pattern_SortingRadixLSD::sorterInit() {
-    arrCopy = new int[getArrSize()];
+    arrCopy = new RADIX_LSD_ELEMENT_TYPE[getArrSize()];
     currentBase = 0;
     prepNewBase();
 }
 void Pattern_SortingRadixLSD::sorterLoop() {
     if (currentlyBucketing == getArrSize()) {
         currentBase++;
-        if (getArrSize() >> currentBase) {
+        if (currentBase <= 11) {
             prepNewBase();
         } else {
             signalDoneSorting();
@@ -21,6 +25,7 @@ void Pattern_SortingRadixLSD::sorterLoop() {
     } else {
         arrSet(leftBucketCurrent++, arrCopy[currentlyBucketing]);
     }
+    currentlyBucketing++;
 }
 void Pattern_SortingRadixLSD::sorterCleanup() {
     delete[] arrCopy;
