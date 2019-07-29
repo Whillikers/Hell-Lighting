@@ -1,0 +1,126 @@
+#include "pattern_sort_merge.h"
+
+// PendingStack implementation
+
+PendingStack::PendingStack() {
+    top = NULL;
+    size = 0;
+}
+PendingStack::~PendingStack() {
+    while (size > 0) {
+        delete top->element;
+        pop();
+    }
+}
+
+void PendingStack::pushSplitAction(int start, int end) {
+    RequiredAction* action = new RequiredAction;
+    action->type = SPLIT;
+    action->start = start;
+    action->end = end;
+    push(action);
+}
+void PendingStack::pushMergeAction(int start, int mid, int end) {
+    RequiredAction* action = new RequiredAction;
+    action->type = MERGE;
+    action->start = start;
+    action->mid = mid;
+    action->end = end;
+    push(action);
+}
+
+RequiredAction* PendingStack::pop() {
+    if (size == 0) {
+        return NULL;
+    } else {
+        RequiredAction* ret = top->element;
+        ListNode* toDelete = top;
+        top = top->next;
+        delete toDelete;
+        size--;
+        return ret;
+    }
+}
+unsigned int PendingStack::getSize() {
+    return size;
+}
+bool PendingStack::nonempty() {
+    return getSize() > 0;
+}
+
+void PendingStack::push(RequiredAction* action) {
+    ListNode* node = new ListNode;
+    node->element = action;
+    node->next = top;
+    top = node;
+
+    size++;
+}
+
+// Pattern_MergeSort implementation
+
+void Pattern_MergeSort::sorterInit() {
+    actionsToDo.pushSplitAction(0, getArrSize());
+    mergeInProgress = false;
+}
+
+void Pattern_MergeSort::prepNextMerge() {
+    RequiredAction* pendingAction = actionsToDo.pop();
+
+    while (pendingAction->type == SPLIT) {
+        if (pendingAction->end - pendingAction->start > 1) {
+            int mid = (pendingAction->start + pendingAction->end)/2;
+            actionsToDo.pushMergeAction(pendingAction->start, mid, pendingAction->end);
+            actionsToDo.pushSplitAction(pendingAction->start, mid);
+            actionsToDo.pushSplitAction(mid, pendingAction->end);
+            delete pendingAction;
+        }
+        pendingAction = actionsToDo.pop();
+    }
+
+    mergeInProgress = true;
+
+    mergeSize = pendingAction->end - pendingAction->start;
+    mergeBuffer = new uint8_t[mergeSize];
+
+    mergeSourceA = 0;
+    mergeSourceB = pendingAction->mid - pendingAction->start;
+    mergeBoundary = mergeSourceB;
+
+    for (int i = 0; i < mergeSize; i++) {
+        mergeBuffer[i] = arrGet(pendingAction->start + i);
+        // copy two halves to merge into a buffer array
+        // the merger will overwrite this region of arr
+    }
+
+    mergeDestination = pendingAction->start;
+
+    delete pendingAction;
+}
+
+void Pattern_MergeSort::sorterLoop() {
+    if (mergeInProgress) {
+        if (mergeSourceA == mergeBoundary && mergeSourceB == mergeSize) {
+            mergeInProgress = false;
+            delete[] mergeBuffer;
+        } else if (mergeSourceA == mergeBoundary) {
+            arrSet(mergeDestination++, mergeBuffer[mergeSourceB++]);
+        } else if (mergeSourceB == mergeSize) {
+            arrSet(mergeDestination++, mergeBuffer[mergeSourceA++]);
+        } else if (mergeBuffer[mergeSourceA] <= mergeBuffer[mergeSourceB]) {
+            arrSet(mergeDestination++, mergeBuffer[mergeSourceA++]);
+        } else {
+            arrSet(mergeDestination++, mergeBuffer[mergeSourceB++]);
+        }
+    } else if (actionsToDo.nonempty()) {
+        prepNextMerge();
+    } else {
+        signalDoneSorting();
+    }
+}
+
+void Pattern_MergeSort::sorterCleanup() {
+    if (mergeInProgress) {
+        delete[] mergeBuffer;
+    }
+}
