@@ -1,7 +1,7 @@
 #include "pattern_sort_cs.h"
 
 unsigned int Pattern_CSSorting::getElementWidth() {
-    return 20;
+    return 10;
 }
 
 void Pattern_CSSorting::sorterInit() {
