@@ -2,44 +2,46 @@
 
 void Pattern_SortingRadixLSD::sorterInit() {
     arrCopy = new uint8_t[getArrSize()];
-    currentBase = 0;
+    bucketStarts = new unsigned int[RADIX];
+
+    shiftedRadix = 1;
     prepNewBase();
 }
 void Pattern_SortingRadixLSD::sorterLoop() {
     if (currentlyBucketing == getArrSize()) {
-        currentBase++;
-        if (getArrSize() >> currentBase) {
+        shiftedRadix *= RADIX;
+        if (shiftedRadix < getArrSize()) {
             prepNewBase();
         } else {
             signalDoneSorting();
+            return;
         }
     }
-    int currentBaseMask = (1 << currentBase);
 
-    if ( arrCopy[currentlyBucketing] & currentBaseMask ) {
-        arrSet(rightBucketCurrent++, arrCopy[currentlyBucketing]);
-    } else {
-        arrSet(leftBucketCurrent++, arrCopy[currentlyBucketing]);
-    }
+    int bucket = arrCopy[currentlyBucketing] / shiftedRadix % RADIX;
+    arrSet(bucketStarts[bucket]++, arrCopy[currentlyBucketing]);
+
     currentlyBucketing++;
 }
 void Pattern_SortingRadixLSD::sorterCleanup() {
     delete[] arrCopy;
+    delete[] bucketStarts;
 }
 
 void Pattern_SortingRadixLSD::prepNewBase() {
-    int currentBaseMask = (1 << currentBase);
+    for (int r = 0; r < RADIX; r++) {
+        bucketStarts[r] = 0;
+    }
 
-    leftBucketCurrent = 0;
-    rightBucketCurrent = 0;
     for (int i = 0; i < getArrSize(); i++) {
-        if ( ~ arrGet(i) & currentBaseMask ) {
-            rightBucketCurrent++;
+        int bucket = arrGet(i) / shiftedRadix % RADIX;
+        for (int j = bucket + 1; j < RADIX; j++) {
+            bucketStarts[j]++;
         }
+        // for every element in a given bucket, increment the starts of all greater buckets
+
         arrCopy[i] = arrGet(i);
     }
-    // TODO better implementation of buckets with linked lists or something
-    // instead of this inefficient second pass
 
     currentlyBucketing = 0;
 }

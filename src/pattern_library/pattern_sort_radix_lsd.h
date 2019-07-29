@@ -2,9 +2,6 @@
 
 #include "../pattern_internals/sorter_pattern.h"
 
-// 1226/5 = 245 < 256 (minimizing requires space for arrCopy)
-// if more space is available, could also use type uint16_t and width 1
-
 class Pattern_SortingRadixLSD: public SorterPattern {
 protected:
     void sorterInit() override;
@@ -12,12 +9,13 @@ protected:
     void sorterLoop() override;
 
 private:
-    uint8_t* arrCopy;
+    const unsigned int RADIX = 4;
+    unsigned int shiftedRadix;
 
-    uint8_t currentBase;
-    uint8_t leftBucketCurrent;
-    uint8_t rightBucketCurrent;
-    uint8_t currentlyBucketing;
+    uint8_t* arrCopy;
+    unsigned int* bucketStarts;
+
+    unsigned int currentlyBucketing;
 
     void prepNewBase();
 };
