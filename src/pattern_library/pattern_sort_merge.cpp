@@ -67,7 +67,7 @@ void Pattern_MergeSort::sorterInit() {
 void Pattern_MergeSort::prepNextMerge() {
     RequiredAction* pendingAction = actionsToDo.pop();
 
-    while (pendingAction->type == SPLIT) {
+    while (pendingAction != NULL && pendingAction->type == SPLIT) {
         if (pendingAction->end - pendingAction->start > 1) {
             int mid = (pendingAction->start + pendingAction->end)/2;
             actionsToDo.pushMergeAction(pendingAction->start, mid, pendingAction->end);
@@ -76,6 +76,17 @@ void Pattern_MergeSort::prepNextMerge() {
             delete pendingAction;
         }
         pendingAction = actionsToDo.pop();
+    }
+    if (pendingAction == NULL) {
+        signalDoneSorting();
+        return;
+        /*
+         * This is an edge case: there is always a merge action at the
+         * bottom of the stack (and thus this loop would eventually find a merge
+         * action to perform) except at the beginning of the sort. Therefore, if
+         * we encounter a stack of just a split action that does not trigger any
+         * merge actions, the arr size was < 2 (and thus we're done sorting)
+         */
     }
 
     mergeInProgress = true;
