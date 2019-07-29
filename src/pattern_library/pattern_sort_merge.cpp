@@ -71,8 +71,8 @@ void Pattern_MergeSort::prepNextMerge() {
             actionsToDo.pushMergeAction(pendingAction->start, mid, pendingAction->end);
             actionsToDo.pushSplitAction(pendingAction->start, mid);
             actionsToDo.pushSplitAction(mid, pendingAction->end);
-            delete pendingAction;
         }
+        delete pendingAction;
         pendingAction = actionsToDo.pop();
     }
     if (pendingAction == NULL) {
