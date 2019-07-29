@@ -4,6 +4,7 @@
 
 class Pattern_CSSorting: public SorterPattern {
 protected:
+    unsigned int getElementWidth() override;
     void sorterInit() override;
     void sorterLoop() override;
 

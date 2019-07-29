@@ -1,5 +1,9 @@
 #include "pattern_sort_cs.h"
 
+unsigned int Pattern_CSSorting::getElementWidth() {
+    return 20;
+}
+
 void Pattern_CSSorting::sorterInit() {
     state = UP;
     current = 0;
