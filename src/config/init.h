@@ -29,8 +29,9 @@
 #include "../pattern_library/pattern_marbling.h"
 #include "../pattern_library/pattern_sort_cocktail.h"
 #include "../pattern_library/pattern_sort_radix_lsd.h"
+#include "../pattern_library/pattern_sort_merge.h"
 
-#define NUM_PATTERNS 21
+#define NUM_PATTERNS 22
 
 // Pattern factory list //
 Factory* patternFactories[NUM_PATTERNS];
@@ -57,4 +58,5 @@ void patternInit() {
     patternFactories[18] = (Factory*) new PatternFactory<Pattern_Marbling>();
     patternFactories[19] = (Factory*) new PatternFactory<Pattern_CocktailShakerSort>();
     patternFactories[20] = (Factory*) new PatternFactory<Pattern_RadixSortLSD>();
+    patternFactories[21] = (Factory*) new PatternFactory<Pattern_MergeSort>();
 }
