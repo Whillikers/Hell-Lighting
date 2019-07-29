@@ -41,11 +41,9 @@ RequiredAction* PendingStack::pop() {
         return ret;
     }
 }
-unsigned int PendingStack::getSize() {
-    return size;
-}
+
 bool PendingStack::nonempty() {
-    return getSize() > 0;
+    return size > 0;
 }
 
 void PendingStack::push(RequiredAction* action) {
