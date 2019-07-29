@@ -27,7 +27,7 @@
 #include "../pattern_library/pattern_colorloop_sin.h"
 #include "../pattern_library/pattern_morse.h"
 #include "../pattern_library/pattern_marbling.h"
-#include "../pattern_library/pattern_sort_cs.h"
+#include "../pattern_library/pattern_sort_cocktail.h"
 #include "../pattern_library/pattern_sort_radix_lsd.h"
 
 #define NUM_PATTERNS 21
@@ -55,6 +55,6 @@ void patternInit() {
     patternFactories[16] = (Factory*) new PatternFactory<Pattern_Colorloop_Sin>();
     patternFactories[17] = (Factory*) new PatternFactory<Pattern_Morse>();
     patternFactories[18] = (Factory*) new PatternFactory<Pattern_Marbling>();
-    patternFactories[19] = (Factory*) new PatternFactory<Pattern_CSSorting>();
-    patternFactories[20] = (Factory*) new PatternFactory<Pattern_SortingRadixLSD>();
+    patternFactories[19] = (Factory*) new PatternFactory<Pattern_CocktailShakerSort>();
+    patternFactories[20] = (Factory*) new PatternFactory<Pattern_RadixSortLSD>();
 }

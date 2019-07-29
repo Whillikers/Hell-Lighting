@@ -1,10 +1,10 @@
-#include "pattern_sort_cs.h"
+#include "pattern_sort_cocktail.h"
 
-unsigned int Pattern_CSSorting::getElementWidth() {
+unsigned int Pattern_CocktailShakerSort::getElementWidth() {
     return 10;
 }
 
-void Pattern_CSSorting::sorterInit() {
+void Pattern_CocktailShakerSort::sorterInit() {
     state = UP;
     current = 0;
     lowIdx = 0;
@@ -12,7 +12,7 @@ void Pattern_CSSorting::sorterInit() {
     swapOccurred = false;
 }
 
-void Pattern_CSSorting::sorterLoop() {
+void Pattern_CocktailShakerSort::sorterLoop() {
     // make swap if applicable
     if (arrGet(current) > arrGet(current + 1)) {
         arrSwap(current, current + 1);

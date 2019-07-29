@@ -2,7 +2,7 @@
 
 #include "../pattern_internals/sorter_pattern.h"
 
-class Pattern_SortingRadixLSD: public SorterPattern {
+class Pattern_RadixSortLSD: public SorterPattern {
 protected:
     void sorterInit() override;
     void sorterCleanup() override;

@@ -2,7 +2,7 @@
 
 #include "../pattern_internals/sorter_pattern.h"
 
-class Pattern_CSSorting: public SorterPattern {
+class Pattern_CocktailShakerSort: public SorterPattern {
 protected:
     unsigned int getElementWidth() override;
     void sorterInit() override;

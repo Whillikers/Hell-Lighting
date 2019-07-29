@@ -1,13 +1,13 @@
 #include "pattern_sort_radix_lsd.h"
 
-void Pattern_SortingRadixLSD::sorterInit() {
+void Pattern_RadixSortLSD::sorterInit() {
     arrCopy = new uint8_t[getArrSize()];
     bucketStarts = new unsigned int[RADIX];
 
     shiftedRadix = 1;
     prepNewBase();
 }
-void Pattern_SortingRadixLSD::sorterLoop() {
+void Pattern_RadixSortLSD::sorterLoop() {
     if (currentlyBucketing == getArrSize()) {
         shiftedRadix *= RADIX;
         if (shiftedRadix < getArrSize()) {
@@ -23,12 +23,12 @@ void Pattern_SortingRadixLSD::sorterLoop() {
 
     currentlyBucketing++;
 }
-void Pattern_SortingRadixLSD::sorterCleanup() {
+void Pattern_RadixSortLSD::sorterCleanup() {
     delete[] arrCopy;
     delete[] bucketStarts;
 }
 
-void Pattern_SortingRadixLSD::prepNewBase() {
+void Pattern_RadixSortLSD::prepNewBase() {
     for (int r = 0; r < RADIX; r++) {
         bucketStarts[r] = 0;
     }
