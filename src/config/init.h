@@ -30,8 +30,9 @@
 #include "../pattern_library/pattern_sort_cocktail.h"
 #include "../pattern_library/pattern_sort_radix_lsd.h"
 #include "../pattern_library/pattern_sort_merge.h"
+#include "../pattern_library/pattern_sort_quick.h"
 
-#define NUM_PATTERNS 22
+#define NUM_PATTERNS 23
 
 // Pattern factory list //
 Factory* patternFactories[NUM_PATTERNS];
@@ -59,4 +60,5 @@ void patternInit() {
     patternFactories[19] = (Factory*) new PatternFactory<Pattern_CocktailShakerSort>();
     patternFactories[20] = (Factory*) new PatternFactory<Pattern_RadixSortLSD>();
     patternFactories[21] = (Factory*) new PatternFactory<Pattern_MergeSort>();
+    patternFactories[22] = (Factory*) new PatternFactory<Pattern_QuickSort>();
 }
