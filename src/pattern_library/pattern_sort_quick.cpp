@@ -2,55 +2,11 @@
 
 // PendingQueue implementation
 
-PendingQueue::PendingQueue() {
-    front = NULL;
-    back = NULL;
-    size = 0;
-}
-PendingQueue::~PendingQueue() {
-    while (size > 0) {
-        delete front->element;
-        pop();
-    }
-}
-
 void PendingQueue::pushPendingSort(int start, int end) {
     RequiredSort* action = new RequiredSort;
     action->start = start;
     action->end = end;
     push(action);
-}
-
-RequiredSort* PendingQueue::pop() {
-    if (size == 0) {
-        return NULL;
-    } else {
-        RequiredSort* ret = front->element;
-        ListNode* toDelete = front;
-        front = front->next;
-        delete toDelete;
-        size--;
-        return ret;
-    }
-}
-
-bool PendingQueue::nonempty() {
-    return size > 0;
-}
-
-void PendingQueue::push(RequiredSort* action) {
-    ListNode* node = new ListNode;
-    node->element = action;
-    node->next = NULL;
-    if (size == 0) {
-        front = node;
-        back = node;
-    } else {
-        back->next = node;
-        back = node;
-    }
-
-    size++;
 }
 
 // Pattern_QuickSort implementation

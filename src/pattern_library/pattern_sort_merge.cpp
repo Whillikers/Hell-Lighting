@@ -2,17 +2,6 @@
 
 // PendingStack implementation
 
-PendingStack::PendingStack() {
-    top = NULL;
-    size = 0;
-}
-PendingStack::~PendingStack() {
-    while (size > 0) {
-        delete top->element;
-        pop();
-    }
-}
-
 void PendingStack::pushSplitAction(int start, int end) {
     RequiredAction* action = new RequiredAction;
     action->type = SPLIT;
@@ -27,32 +16,6 @@ void PendingStack::pushMergeAction(int start, int mid, int end) {
     action->mid = mid;
     action->end = end;
     push(action);
-}
-
-RequiredAction* PendingStack::pop() {
-    if (size == 0) {
-        return NULL;
-    } else {
-        RequiredAction* ret = top->element;
-        ListNode* toDelete = top;
-        top = top->next;
-        delete toDelete;
-        size--;
-        return ret;
-    }
-}
-
-bool PendingStack::nonempty() {
-    return size > 0;
-}
-
-void PendingStack::push(RequiredAction* action) {
-    ListNode* node = new ListNode;
-    node->element = action;
-    node->next = top;
-    top = node;
-
-    size++;
 }
 
 // Pattern_MergeSort implementation
