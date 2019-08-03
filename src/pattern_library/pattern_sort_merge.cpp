@@ -31,7 +31,8 @@ void Pattern_MergeSort::prepNextMerge() {
     while (pendingAction != NULL && pendingAction->type == SPLIT) {
         if (pendingAction->end - pendingAction->start > 1) {
             int mid = (pendingAction->start + pendingAction->end)/2;
-            actionsToDo.pushMergeAction(pendingAction->start, mid, pendingAction->end);
+            actionsToDo.pushMergeAction(pendingAction->start, mid,
+                pendingAction->end);
             actionsToDo.pushSplitAction(pendingAction->start, mid);
             actionsToDo.pushSplitAction(mid, pendingAction->end);
         }
@@ -88,6 +89,8 @@ void Pattern_MergeSort::sorterLoop() {
             mark(mergeDestination - mergeSourceA + mergeBoundary);
             arrSet(mergeDestination++, mergeBuffer[mergeSourceB++]);
         }
+        // mark (original, possibly overwritten) source of the element currently
+        // being merged in
     } else if (actionsToDo.nonempty()) {
         prepNextMerge();
     } else {
