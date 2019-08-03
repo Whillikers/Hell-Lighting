@@ -1,26 +1,15 @@
 #include "sorter_pattern.h"
 
-unsigned int SorterPattern::getElementWidth() {
-    return 5;
-}
-unsigned int SorterPattern::getArrSize() {
-    return NUM_LEDS_TOTAL / getElementWidth();
-}
-unsigned int SorterPattern::getStartDelay() {
-    return 2000;
-}
-unsigned int SorterPattern::getEndDelay() {
-    return 7000;
-}
-
 void SorterPattern::init() {
     clearLEDs();
     FastLED.setBrightness(BRIGHTNESS_MAX);
 
+    marked = new bool[getArrSize()];
     // initialize arr to [0 ... getArrSize() - 1]
     arr = new uint8_t[getArrSize()];
     for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
+        marked[i] = false;
     }
     srand(millis());
     arrShuffle();
@@ -43,6 +32,9 @@ void SorterPattern::loop() {
         break;
     case SORT:
         sorterLoop();
+        for (int i = 0; i < getArrSize(); i++) {
+            updateLEDs(i);
+        }
         FastLED.show();
         break;
     case POST_SORT:
@@ -55,7 +47,7 @@ void SorterPattern::loop() {
             }
         } else {
             if (blinkState) {
-                blinkOff();
+                clearLEDs();
                 blinkState = false;
             }
         }
@@ -72,6 +64,11 @@ bool SorterPattern::isFinished() {
     return (state == FINISHED);
 }
 
+void SorterPattern::mark(int i) {
+    marked[i] = true;
+}
+
+
 void SorterPattern::sorterInit() {}
 void SorterPattern::sorterLoop() {}
 void SorterPattern::sorterCleanup() {}
@@ -83,19 +80,27 @@ void SorterPattern::signalDoneSorting() {
 }
 
 uint8_t SorterPattern::arrGet(int i) {
+    if (getMarkAccess()) {
+        mark(i);
+    }
     return arr[i];
 }
 void SorterPattern::arrSet(int i, uint8_t val) {
+    if (getMarkEdits()) {
+        mark(i);
+    }
     arr[i] = val;
-    updateLEDs(i);
 }
 void SorterPattern::arrSwap(int i, int j) {
+    if (getMarkAccess() || getMarkEdits()) {
+        mark(i);
+        mark(j);
+    }
+
     if (i != j) {
         uint8_t tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
-        updateLEDs(i);
-        updateLEDs(j);
     }
 }
 void SorterPattern::arrShuffle() {
@@ -107,20 +112,30 @@ void SorterPattern::arrShuffle() {
 
 void SorterPattern::updateLEDs(int i) {
     CHSV color(map(arr[i], 0, getArrSize(), 0, 255), 255, 255);
+    int elemStart = getElementWidth() * i;
+    int k = 0;
 
-    for (int k = getElementWidth() * i; k < getElementWidth() * (i + 1); k++) {
-        leds[transform(k)] = color;
+    // first getMarkWidth() LEDs depend on marked[i]
+    if (marked[i]) {
+        for (; k < getMarkWidth(); k++) {
+            leds[transform(elemStart + k)] = CRGB::Black;
+        }
+        marked[i] = false;
+    } else {
+        for (; k < getMarkWidth(); k++) {
+            leds[transform(elemStart + k)] = color;
+        }
+    }
+    
+    // remaining LEDS only depend on color
+    for (; k < getElementWidth(); k++) {
+        leds[transform(elemStart + k)] = color;
     }
 }
 
-void SorterPattern::blinkOff() {
-    for (int i = 0; i < NUM_LEDS_TOTAL; i++) {
-        leds[i] = CRGB::Black;
-    }
-    FastLED.show();
-}
 void SorterPattern::blinkOn() {
     for (int i = 0; i < getArrSize(); i++) {
+        marked[i] = false;
         updateLEDs(i);
     }
     FastLED.show();
