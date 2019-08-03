@@ -10,6 +10,7 @@ void SorterPattern::init() {
     for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
         marked[i] = false;
+        updateLEDs(i);
     }
     srand(millis());
     arrShuffle();
@@ -126,7 +127,7 @@ void SorterPattern::updateLEDs(int i) {
             leds[transform(elemStart + k)] = color;
         }
     }
-    
+
     // remaining LEDS only depend on color
     for (; k < getElementWidth(); k++) {
         leds[transform(elemStart + k)] = color;
