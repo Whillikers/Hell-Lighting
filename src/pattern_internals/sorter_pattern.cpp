@@ -9,12 +9,14 @@ void SorterPattern::init() {
     arr = new uint8_t[getArrSize()];
     for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
-        marked[i] = false;
-        updateLEDs(i);
     }
     srand(millis());
     arrShuffle();
 
+    for (int i = 0; i < getArrSize(); i++) {
+        marked[i] = false;
+        updateLEDs(i);
+    }
     FastLED.show();
 
     state = PRE_SORT;
