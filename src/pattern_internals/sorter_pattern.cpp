@@ -9,11 +9,14 @@ void SorterPattern::init() {
     arr = new uint8_t[getArrSize()];
     for (int i = 0; i < getArrSize(); i++) {
         arr[i] = i;
-        marked[i] = false;
     }
     srand(millis());
     arrShuffle();
 
+    for (int i = 0; i < getArrSize(); i++) {
+        marked[i] = false;
+        updateLEDs(i);
+    }
     FastLED.show();
 
     state = PRE_SORT;
@@ -126,7 +129,7 @@ void SorterPattern::updateLEDs(int i) {
             leds[transform(elemStart + k)] = color;
         }
     }
-    
+
     // remaining LEDS only depend on color
     for (; k < getElementWidth(); k++) {
         leds[transform(elemStart + k)] = color;
