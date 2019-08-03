@@ -67,44 +67,66 @@ protected:
      * Determines the element width (default 5 unless overriden)
      * @return the width of each element, in number of LEDs
      */
-    virtual unsigned int getElementWidth();
+    virtual unsigned int getElementWidth() { return 5; }
     /**
      * Determines the array size (default NUM_LEDS_TOTAL/width unless overriden)
      * @return the size of the array to be sorted
      */
-    virtual unsigned int getArrSize();
+    virtual unsigned int getArrSize() { return NUM_LEDS_TOTAL/getElementWidth(); }
     /**
      * Determines the time to wait before sorting begins (default 2000)
      * @return the start delay, in milliseconds
      */
-    virtual unsigned int getStartDelay();
+    virtual unsigned int getStartDelay() { return 2000; }
     /**
      * Determines the time to wait after sorting ends (default 7000)
      * @return the end delay, in milliseconds
      */
-    virtual unsigned int getEndDelay();
+    virtual unsigned int getEndDelay() { return 7000; }
 
-    // TODO customize whether/how swaps/accesses get highlighted by overriding
+    /** Determines whether to automatically "mark" edits to the array by
+     * making the first markWidth() LEDs black for one loop
+     */
+    virtual bool getMarkEdits() { return true; }
+
+    /** Determines whether to automatically "mark" accesses to the array by
+     * making the first markWidth() LEDs black for one loop
+     */
+    virtual bool getMarkAccess() { return false; }
+
+    /**
+     * The width of the highlights for emphasizing accesses/edits.
+     * CODE ASSUMES 0 <= markWidth() << getElementWidth()
+     */
+    virtual unsigned int getMarkWidth() { return 2; }
 
     /**
      * Indicate that the array is now sorted.
      */
     void signalDoneSorting();
-    
+
+    // functions for access the array
     uint8_t arrGet(int i);
     void arrSet(int i, uint8_t val);
     void arrSwap(int i, int j);
     void arrShuffle();
 
+    /**
+     * Manually mark one element of the array (regardless of whether
+     * accesses/edits are automatically marked)
+     * @param i the element to mark
+     */
+    void mark(int i);
+
 private:
     uint8_t* arr;
+    bool* marked;
 
     enum PatternState { PRE_SORT, SORT, POST_SORT, FINISHED };
     PatternState state;
     unsigned long lastEvent;
 
     void updateLEDs(int i);
-    void blinkOff();
     void blinkOn();
     bool blinkState;
 };

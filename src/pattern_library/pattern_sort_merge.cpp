@@ -76,12 +76,16 @@ void Pattern_MergeSort::sorterLoop() {
             mergeInProgress = false;
             delete[] mergeBuffer;
         } else if (mergeSourceA == mergeBoundary) {
+            mark(mergeDestination - mergeSourceA + mergeBoundary);
             arrSet(mergeDestination++, mergeBuffer[mergeSourceB++]);
         } else if (mergeSourceB == mergeSize) {
+            mark(mergeDestination - mergeSourceB + mergeBoundary);
             arrSet(mergeDestination++, mergeBuffer[mergeSourceA++]);
         } else if (mergeBuffer[mergeSourceA] <= mergeBuffer[mergeSourceB]) {
+            mark(mergeDestination - mergeSourceB + mergeBoundary);
             arrSet(mergeDestination++, mergeBuffer[mergeSourceA++]);
         } else {
+            mark(mergeDestination - mergeSourceA + mergeBoundary);
             arrSet(mergeDestination++, mergeBuffer[mergeSourceB++]);
         }
     } else if (actionsToDo.nonempty()) {
